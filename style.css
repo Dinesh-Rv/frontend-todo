@@ -1,0 +1,13 @@
+body {
+    margin: 0px;
+}
+
+.container .top-container {
+    background-color: #2564cf;
+}
+
+.container .top-container .apps-icon,
+.container .top-container .to-do-link,
+.container .top-container .search-bar {
+    display: inline-block;
+}
