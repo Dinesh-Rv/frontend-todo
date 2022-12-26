@@ -1,5 +1,6 @@
-body {
+html body {
     margin: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .container .top-container {
@@ -9,9 +10,15 @@ body {
 
 .container .top-container .apps-icon,
 .container .top-container .to-do-link,
-.container .top-container .search-bar {
+.container .top-container .search-bar,
+.container .bottom-container .left-side .sidebar-top .selective .left-side-icon,
+.container .bottom-container .left-side .sidebar-top .selective .selective-info {
     display: inline-block;
     vertical-align: middle;
+}
+
+.container .bottom-container .left-side .sidebar-top .selective {
+    height: 45px;
 }
 
 .container .top-container .to-do-link {
@@ -22,7 +29,6 @@ body {
 }
 
 .container .top-container .to-do-link .to-do {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #ffffff;
     text-decoration: none;
     font-weight: 600;
@@ -82,4 +88,61 @@ body {
     color: #2564cf;
     transform: scaleX(-1);
     margin-top: 3px;
+}
+
+.container .bottom-container .left-side .sidebar-top {
+    display: inline-block;
+    font-size: 14px;
+    list-style: none;
+    padding-left: 0px;
+    width: 290px;
+}
+
+.container .bottom-container .left-side {
+    box-shadow: 3px 0px 2px #faf9f8;
+    display: inline-block;
+}
+
+.container .bottom-container .left-side .sidebar-top .selective .left-side-icon .material-icons {
+    vertical-align: middle;
+    padding-left: 23px;
+    color: #3f3e3d;
+}
+
+.container .bottom-container .left-side .sidebar-top .selective .selective-info {
+    margin-left: 15px;
+    vertical-align: middle;
+}
+
+.container .bottom-container .left-side .sidebar-top .selective:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+.container .bottom-container .left-side .menu-icon {
+    margin-top: 29px;
+    margin-left: 23px;
+}
+
+.container .bottom-container .left-side .menu-icon .material-icons:hover{
+    cursor: pointer;
+}
+
+.container .bottom-container .left-side hr {
+    width: 250px;
+    height: 0.1px;
+    border-radius: 0.5px;
+    border: 0px;
+    background-color: gray;
+    opacity: 0.4;
+}
+
+.container .bottom-container .left-side .sidebar-center .add-new-list .left-side-icon,
+.container .bottom-container .left-side .sidebar-center .add-new-list p {
+    display: inline-block;
+}
+
+
+.container .bottom-container .left-side .sidebar-center .add-new-list p {
+    vertical-align: middle;
 }
