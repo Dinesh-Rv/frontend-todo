@@ -3,6 +3,7 @@ body {
 }
 
 .container .top-container {
+    height: 48px;
     background-color: #2564cf;
 }
 
@@ -10,4 +11,75 @@ body {
 .container .top-container .to-do-link,
 .container .top-container .search-bar {
     display: inline-block;
+    vertical-align: middle;
+}
+
+.container .top-container .to-do-link {
+    height: 25px;
+    width: 60px;
+    text-align: center;
+    margin: 0px;
+}
+
+.container .top-container .to-do-link .to-do {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.container .top-container .to-do-link a:hover {
+    text-decoration: underline;
+}
+
+
+.container .top-container .apps-icon,
+.container .top-container .right-corner .settings-icon,
+.container .top-container .right-corner .help-icon {
+    vertical-align: middle;
+    background-color: #2564cf;
+    color: #ffffff;
+    height: 48px;
+    width: 48px;
+    border: 0ch;
+}
+
+.container .top-container .apps-icon:hover,
+.container .top-container .right-corner button:hover,
+.container .top-container .right-corner button:hover {
+    cursor: pointer;
+    background-color: #215aba;
+}
+
+.container .top-container .search-bar:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+.container .top-container .right-corner {
+    display: inline-block;
+    width: 36%;
+    text-align: right;
+}
+
+.container .top-container .apps-icon .material-icons,
+.container .top-container .right-corner .settings-icon .material-icons,
+.container .top-container .right-corner .help-icon .material-icons { 
+    font-size: 20px;
+}
+
+.container .top-container .search-bar {
+    border: 0ch;
+    background-color: #ffffff;
+    text-align: left;
+    width: 32.5%;
+    height: 32px;
+    margin-left: 21%;
+    border-radius: 5px;
+}
+
+.container .top-container .search-bar .material-icons {
+    color: #2564cf;
+    transform: scaleX(-1);
+    margin-top: 3px;
 }
