@@ -95,7 +95,7 @@ html body {
     font-size: 14px;
     list-style: none;
     padding-left: 0px;
-    width: 290px;
+    width: 273px;
 }
 
 .container .bottom-container .left-side {
@@ -137,12 +137,64 @@ html body {
     opacity: 0.4;
 }
 
-.container .bottom-container .left-side .sidebar-center .add-new-list .left-side-icon,
-.container .bottom-container .left-side .sidebar-center .add-new-list p {
+.container .bottom-container .left-side .sidebar-center .add-new-list,
+.container .bottom-container .left-side .sidebar-center .create-group-icon {
     display: inline-block;
+    vertical-align: middle;
+}
+
+/*Doubt*/
+.container .bottom-container .left-side .sidebar-center {
+    height: 250px;
+}
+
+.container .bottom-container .left-side .sidebar-center .add-new-list {
+    color: #2564cf;
+    width: 198px;
+    padding-left: 23px;
+}
+
+.container .bottom-container .left-side .sidebar-center .add-new-list:hover {
+    cursor: text;
+    background-color: #f5f5f5;
+}
+
+.container .bottom-container .left-side .sidebar-center .add-new-list .left-side-icon,
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text p {
+    height: 22px;
+}
+
+.container .bottom-container .left-side .sidebar-center .create-group-icon {
+    color: #2564cf;
+    padding: 10px;
+}
+
+.container .bottom-container .left-side .sidebar-center .create-group-icon:hover {
+    background-color: #f5f5f5;
 }
 
 
-.container .bottom-container .left-side .sidebar-center .add-new-list p {
-    vertical-align: middle;
+.container .bottom-container .left-side .sidebar-bottom .accessibility {
+    display: inline-block;
+    padding: 15px;
+    margin: 0px;
+}
+
+.container .bottom-container .left-side .sidebar-bottom .accessibility .material-icons {
+font-size: 21px;
+}
+
+.container .bottom-container .left-side .sidebar-bottom .accessibility:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
 }
