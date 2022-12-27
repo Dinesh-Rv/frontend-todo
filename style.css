@@ -1,6 +1,7 @@
 html body {
     margin: 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
 }
 
 .container .top-container {
@@ -9,16 +10,22 @@ html body {
 }
 
 .container .bottom-container .left-side {
-    vertical-align: top;
+    background-color: white;
+    height: 560px;
+    margin-top: 0px;
+    display: inline-block;
 }
 
 .container .top-container .apps-icon,
 .container .top-container .to-do-link,
-.container .top-container .search-bar,
+.container .top-container .search-bar {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .container .bottom-container .left-side .sidebar-top .selective .left-side-icon,
 .container .bottom-container .left-side .sidebar-top .selective .selective-info {
     display: inline-block;
-    vertical-align: middle;
 }
 
 .container .bottom-container .left-side .sidebar-top .selective {
@@ -45,7 +52,9 @@ html body {
 
 .container .top-container .apps-icon,
 .container .top-container .right-corner .settings-icon,
-.container .top-container .right-corner .help-icon {
+.container .top-container .right-corner .help-icon,
+.container .top-container .right-corner .whats-new-icon,
+.container .top-container .right-corner .account-icon {
     vertical-align: middle;
     background-color: #2564cf;
     color: #ffffff;
@@ -100,11 +109,8 @@ html body {
     list-style: none;
     padding-left: 0px;
     width: 273px;
-}
-
-.container .bottom-container .left-side {
-    margin-top: 30px;
-    display: inline-block;
+    margin-top: 3px;
+    margin-bottom: 2px;
 }
 
 .container .bottom-container .left-side .sidebar-top .selective .left-side-icon .material-icons {
@@ -124,7 +130,8 @@ html body {
 }
 
 .container .bottom-container .left-side .menu-icon {
-    margin-top: 0px;
+    margin-top: 28px;
+    margin-bottom: 0px;
     margin-left: 23px;
 }
 
@@ -147,9 +154,8 @@ html body {
     vertical-align: middle;
 }
 
-/*Doubt*/
 .container .bottom-container .left-side .sidebar-center {
-    height: 250px;
+    height: 174px;
 }
 
 .container .bottom-container .left-side .sidebar-center .add-new-list {
@@ -190,7 +196,7 @@ html body {
 
 .container .bottom-container .left-side .sidebar-bottom .accessibility {
     display: inline-block;
-    padding: 15px 15px 15px 15px;
+    padding: 15px 15px 0px 15px;
     margin: 0px;
 }
 
@@ -209,7 +215,6 @@ font-size: 21px;
 }
 
 .container .bottom-container .center-main {
-    width: 945px;
-    height: 678px;
-    background-color: #faf9f8;
+    width: 947px;
+    height: 534px;
 }
