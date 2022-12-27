@@ -8,6 +8,10 @@ html body {
     background-color: #2564cf;
 }
 
+.container .bottom-container .left-side {
+    vertical-align: top;
+}
+
 .container .top-container .apps-icon,
 .container .top-container .to-do-link,
 .container .top-container .search-bar,
@@ -99,7 +103,7 @@ html body {
 }
 
 .container .bottom-container .left-side {
-    box-shadow: 3px 0px 2px #faf9f8;
+    margin-top: 30px;
     display: inline-block;
 }
 
@@ -120,7 +124,7 @@ html body {
 }
 
 .container .bottom-container .left-side .menu-icon {
-    margin-top: 29px;
+    margin-top: 0px;
     margin-left: 23px;
 }
 
@@ -186,7 +190,7 @@ html body {
 
 .container .bottom-container .left-side .sidebar-bottom .accessibility {
     display: inline-block;
-    padding: 15px;
+    padding: 15px 15px 15px 15px;
     margin: 0px;
 }
 
@@ -197,4 +201,15 @@ font-size: 21px;
 .container .bottom-container .left-side .sidebar-bottom .accessibility:hover {
     background-color: #f5f5f5;
     cursor: pointer;
+}
+
+.container .bottom-container .left-side,
+.container .bottom-container .center-main {
+    display: inline-block;
+}
+
+.container .bottom-container .center-main {
+    width: 945px;
+    height: 678px;
+    background-color: #faf9f8;
 }
