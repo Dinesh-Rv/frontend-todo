@@ -18,7 +18,7 @@
           <i class="material-icons">apps</i>
         </button>
         <p class="to-do-link">
-          <a class="to-do" href="google.com">To Do</a>
+          <a class="to-do" href="index.html">To Do</a>
         </p>
         <button class="search-bar">
           <i class="material-icons">search</i>
@@ -83,12 +83,19 @@
           </ul>
           <hr />
           <div class="sidebar-center">
+            <ul id="to-do-holder-list" class="to-do-holder-list">
+              <li>dinesh</li>
+            </ul>
             <div class="add-new-list">
               <div class="left-side-icon">
                 <i class="material-icons">add</i>
               </div>
               <div class="new-list-text">
-                <p>New list</p>
+                <input
+                  type="text"
+                  id="to-do-holder-name"
+                  placeholder="New List"
+                />
               </div>
             </div>
             <div class="create-group-icon">
@@ -113,8 +120,21 @@
             </div>
           </div>
         </div>
-        <div class="center-main"></div>
+        <div class="center-main">
+          <div class="center-head">
+            <div class="center-head-icon">
+              <i class="material-icons">light_mode</i>
+            </div>
+            <div class="center-head-desc">
+              <p>My Day</p>
+            </div>
+            <div class="date-info">
+              <p id="current-date"></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <script src="app.js"></script>
   </body>
 </html>
