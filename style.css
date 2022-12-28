@@ -129,6 +129,14 @@ html body {
     background-color: #f5f5f5;
 }
 
+.container .bottom-container .left-side .sidebar-center ul {
+    padding-left: 48px;
+}
+
+.container .bottom-container .left-side .sidebar-center ul li {
+    padding-left: 20px;
+}
+
 .container .bottom-container .left-side .menu-icon {
     margin-top: 28px;
     margin-bottom: 0px;
@@ -164,13 +172,16 @@ html body {
     padding-left: 23px;
 }
 
-.container .bottom-container .left-side .sidebar-center .add-new-list:hover {
-    cursor: text;
+.container .bottom-container .left-side .sidebar-center .add-new-list:hover,
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input:hover {
     background-color: #f5f5f5;
 }
 
+
 .container .bottom-container .left-side .sidebar-center .add-new-list .left-side-icon,
-.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text {
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text,
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text .left-side-icon,
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input{
     display: inline-block;
     vertical-align: middle;
 }
@@ -180,10 +191,16 @@ html body {
     font-size: 14px;
 }
 
-.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text p {
-    height: 22px;
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input {
+    border: 0px none;
+    outline: none;
+    width: 150px;
+    height: 50px;
 }
 
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input::placeholder {
+    color: #2564cf;
+}
 .container .bottom-container .left-side .sidebar-center .create-group-icon {
     color: #2564cf;
     padding: 10px;
@@ -212,9 +229,41 @@ font-size: 21px;
 .container .bottom-container .left-side,
 .container .bottom-container .center-main {
     display: inline-block;
+    vertical-align: middle;
 }
 
 .container .bottom-container .center-main {
-    width: 947px;
-    height: 534px;
+    width: 987px;
+    height: 560px;
+}
+
+.container .bottom-container .center-main .center-head .center-head-icon,
+.container .bottom-container .center-main .center-head .center-head-desc {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.container .bottom-container .center-main .center-head .center-head-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.container .bottom-container .center-main .center-head .center-head-desc p {
+    margin-bottom: 0px;
+}
+
+.container .bottom-container .center-main .center-head {
+    padding: 10px;
+    padding-left: 40px;
+}
+
+.container .bottom-container .center-main .center-head .date-info {
+    font-size: small;
+    color: gray;
+}
+
+.container .bottom-container .sidebar-center .to-do-holder-list {
+    padding: 10px;
+    margin: 0px;
 }
