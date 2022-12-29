@@ -43,63 +43,64 @@
           <div class="menu-icon">
             <i class="material-icons">menu</i>
           </div>
-          <ul class="sidebar-top">
-            <li class="selective">
-              <div class="left-side-icon">
-                <i class="material-icons">light_mode</i>
-              </div>
-              <p class="selective-info">My Day</p>
-            </li>
-            <li class="selective">
-              <div class="left-side-icon">
-                <i class="material-icons">star</i>
-              </div>
-              <p class="selective-info">Important</p>
-            </li>
-            <li class="selective">
-              <div class="left-side-icon">
-                <i class="material-icons">calendar_month</i>
-              </div>
-              <p class="selective-info">Planned</p>
-            </li>
-            <li class="selective">
-              <div class="left-side-icon">
-                <i class="material-icons">person</i>
-              </div>
-              <p class="selective-info">Assigned to me</p>
-            </li>
-            <li class="selective">
-              <div class="left-side-icon">
-                <i class="material-icons">flag</i>
-              </div>
-              <p class="selective-info">Flagged email</p>
-            </li>
-            <li class="selective">
-              <div class="left-side-icon">
-                <i class="material-icons">home</i>
-              </div>
-              <p class="selective-info">Tasks</p>
-            </li>
-          </ul>
-          <hr />
-          <div class="sidebar-center">
-            <ul id="to-do-holder-list" class="to-do-holder-list">
-              <li>dinesh</li>
+          <div class="sidebar-content">
+            <ul class="sidebar-main" id="sidebar-main">
+              <li class="selective">
+                <div class="left-side-icon">
+                  <i class="material-icons">light_mode</i>
+                </div>
+                <p class="selective-info">My Day</p>
+              </li>
+              <li class="selective">
+                <div class="left-side-icon">
+                  <i class="material-icons">star</i>
+                </div>
+                <p class="selective-info">Important</p>
+              </li>
+              <li class="selective">
+                <div class="left-side-icon">
+                  <i class="material-icons">calendar_month</i>
+                </div>
+                <p class="selective-info">Planned</p>
+              </li>
+              <li class="selective">
+                <div class="left-side-icon">
+                  <i class="material-icons">person</i>
+                </div>
+                <p class="selective-info">Assigned to me</p>
+              </li>
+              <li class="selective">
+                <div class="left-side-icon">
+                  <i class="material-icons">flag</i>
+                </div>
+                <p class="selective-info">Flagged email</p>
+              </li>
+              <li class="selective">
+                <div class="left-side-icon">
+                  <i class="material-icons">home</i>
+                </div>
+                <p class="selective-info">Tasks</p>
+              </li>
+              <hr />
+              <div id="sortable-list" class="sortable-list"></div>
             </ul>
-            <div class="add-new-list">
-              <div class="left-side-icon">
-                <i class="material-icons">add</i>
+            <div class="sidebar-center">
+              <ul id="to-do-vault-list" class="to-do-vault-list"></ul>
+              <div class="add-new-list">
+                <div class="left-side-icon">
+                  <i class="material-icons">add</i>
+                </div>
+                <div class="new-list-text">
+                  <input
+                    type="text"
+                    id="to-do-vault-name"
+                    placeholder="New List"
+                  />
+                </div>
               </div>
-              <div class="new-list-text">
-                <input
-                  type="text"
-                  id="to-do-holder-name"
-                  placeholder="New List"
-                />
+              <div class="create-group-icon">
+                <i class="material-icons">assignment_add</i>
               </div>
-            </div>
-            <div class="create-group-icon">
-              <i class="material-icons">assignment_add</i>
             </div>
           </div>
           <div class="sidebar-bottom">

@@ -12,13 +12,14 @@ function getCurrentDate() {
   document.getElementById("current-date").outerHTML = date;
 }
 
-var toDoHolderName = document.getElementById("to-do-holder-name");
+var toDoHolderName = document.getElementById("to-do-vault-name");
 toDoHolderName.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     const node = document.createElement("li");
     const text = document.createTextNode(toDoHolderName.value);
+    node.innerHTML = '<i class="material-icons">list</i>';
     node.appendChild(text);
-    document.getElementById("to-do-holder-list").appendChild(node);
+    document.getElementById("sortable-list").appendChild(node);
     toDoHolderName.value = "";
   }
 });

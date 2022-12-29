@@ -23,12 +23,12 @@ html body {
     vertical-align: middle;
 }
 
-.container .bottom-container .left-side .sidebar-top .selective .left-side-icon,
-.container .bottom-container .left-side .sidebar-top .selective .selective-info {
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .left-side-icon,
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .selective-info {
     display: inline-block;
 }
 
-.container .bottom-container .left-side .sidebar-top .selective {
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective {
     height: 45px;
 }
 
@@ -103,7 +103,8 @@ html body {
     margin-top: 3px;
 }
 
-.container .bottom-container .left-side .sidebar-top {
+.container .bottom-container .left-side .sidebar-content  .sidebar-main,
+.container .bottom-container .left-side .sidebar-content .sidebar-main .sortable-list {
     display: inline-block;
     font-size: 14px;
     list-style: none;
@@ -113,18 +114,20 @@ html body {
     margin-bottom: 2px;
 }
 
-.container .bottom-container .left-side .sidebar-top .selective .left-side-icon .material-icons {
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .left-side-icon .material-icons,
+.container .bottom-container .left-side .sidebar-content .sidebar-main .sortable-list li .material-icons {
     vertical-align: middle;
     padding-left: 23px;
     color: #3f3e3d;
 }
 
-.container .bottom-container .left-side .sidebar-top .selective .selective-info {
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .selective-info {
     margin-left: 15px;
     vertical-align: middle;
 }
 
-.container .bottom-container .left-side .sidebar-top .selective:hover {
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective:hover,
+.container .bottom-container .left-side .sidebar-content .sidebar-main .sortable-list li:hover{
     cursor: pointer;
     background-color: #f5f5f5;
 }
@@ -163,7 +166,7 @@ html body {
 }
 
 .container .bottom-container .left-side .sidebar-center {
-    height: 174px;
+    height: 165px;
 }
 
 .container .bottom-container .left-side .sidebar-center .add-new-list {
@@ -261,9 +264,4 @@ font-size: 21px;
 .container .bottom-container .center-main .center-head .date-info {
     font-size: small;
     color: gray;
-}
-
-.container .bottom-container .sidebar-center .to-do-holder-list {
-    padding: 10px;
-    margin: 0px;
 }
