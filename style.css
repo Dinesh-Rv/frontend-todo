@@ -1,6 +1,6 @@
 html body {
     margin: 0px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f5f5;
 }
 
@@ -12,6 +12,7 @@ html body {
 .container .bottom-container .left-side {
     background-color: white;
     height: 560px;
+    width: 290px;
     margin-top: 0px;
 }
 
@@ -31,7 +32,7 @@ html body {
     height: 45px;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective  .material-icons,
+.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .material-icons,
 .container .bottom-container .left-side .sidebar-content .group-list li .material-icons {
     padding-left: 23px;
     vertical-align: middle;
@@ -59,7 +60,6 @@ html body {
 .container .top-container .to-do-link a:hover {
     text-decoration: underline;
 }
-
 
 .container .top-container .apps-icon,
 .container .top-container .right-corner .settings-icon,
@@ -94,7 +94,7 @@ html body {
 
 .container .top-container .apps-icon .material-icons,
 .container .top-container .right-corner .settings-icon .material-icons,
-.container .top-container .right-corner .help-icon .material-icons { 
+.container .top-container .right-corner .help-icon .material-icons {
     font-size: 20px;
 }
 
@@ -143,9 +143,9 @@ html body {
     vertical-align: middle;
 }
 
-
 .container .bottom-container .left-side .sidebar-content .sidebar-main .selective:hover,
-.container .bottom-container .left-side .sidebar-content .group-list li:hover{
+.container .bottom-container .left-side .sidebar-content .group-list li:hover,
+.container .bottom-container .center .center-main .task-list-container .task-list li:hover {
     cursor: pointer;
     background-color: #f5f5f5;
 }
@@ -164,7 +164,7 @@ html body {
     margin-left: 23px;
 }
 
-.container .bottom-container .left-side .menu-icon .material-icons:hover{
+.container .bottom-container .left-side .menu-icon .material-icons:hover {
     cursor: pointer;
 }
 
@@ -198,16 +198,14 @@ html body {
     height: 450px;
 }
 
-
 .container .bottom-container .left-side .sidebar-content {
     overflow-y: auto;
 }
 
-
 .container .bottom-container .left-side .sidebar-center .add-new-list .left-side-icon,
 .container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text,
 .container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text .left-side-icon,
-.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input{
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input {
     display: inline-block;
     vertical-align: middle;
 }
@@ -224,9 +222,11 @@ html body {
     height: 50px;
 }
 
-.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input::placeholder {
+.container .bottom-container .left-side .sidebar-center .add-new-list .new-list-text input::placeholder,
+.container .bottom-container .center .center-main .task-list-origin .to-do-input input::placeholder {
     color: #2564cf;
 }
+
 .container .bottom-container .left-side .sidebar-center .create-group-icon {
     color: #2564cf;
     padding: 10px;
@@ -235,7 +235,6 @@ html body {
 .container .bottom-container .left-side .sidebar-center .create-group-icon:hover {
     background-color: #f5f5f5;
 }
-
 
 .container .bottom-container .left-side .sidebar-bottom .accessibility {
     display: inline-block;
@@ -262,6 +261,9 @@ html body {
     vertical-align: middle;
 }
 
+.container .bottom-container .center .center-head {
+    margin: 28px 0px 28px 28px;
+}
 
 .container .bottom-container .center .center-head .center-head-icon,
 .container .bottom-container .center .center-head .center-head-desc {
@@ -279,22 +281,136 @@ html body {
     cursor: pointer;
 }
 
-.container .bottom-container .center .center-head .center-head-desc {
-    margin-top: 28px;
-}
-
 .container .bottom-container .center .center-head .center-head-desc p {
     margin-bottom: 0px;
     margin-top: 0px;
 }
 
-
 .container .bottom-container .center .center-head {
     width: 935px;
-    margin-left: 23PX;
 }
 
 .container .bottom-container .center .center-head .date-info {
     font-size: small;
     color: gray;
+}
+
+.container .bottom-container .center .center-main .task-list-origin {
+    background-color: white;
+    width: 940px;
+    height: 110px;
+    margin-left: 25px;
+    text-align: center;
+    box-shadow: 1px 1px 3px gray;
+    border-radius: 3px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin i,
+.container .bottom-container .center .center-main .task-list-origin .to-do-input {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .to-do-input input {
+    height: 53px;
+    width: 800px;
+    border: 0px none;
+    outline: none;
+    font-size: 15px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .to-do-input {
+    padding: 0px 20px 0px 20px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .origin-feature {
+    height: 45px;
+    width: 905px;
+    text-align: left;
+    background-color: #f5f5f5;
+    padding: 10px 0px 0px 35px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .origin-feature .material-icons {
+    margin-right: 15px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .origin-feature .material-icons:hover {
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.container .bottom-container .center .center-main .task-list-container {
+    height: 345px;
+    width: 985px;
+    overflow-y: auto;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list {
+    list-style: none;
+    padding-left: 25px;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list li {
+    width: 940px;
+    height: 50px;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 1px 0px 3px grey;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list li i,
+.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info,
+.container .bottom-container .center .center-main .task-list-container .task-list .important-icon {
+    display: inline-block;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info {
+    font-size: 13px;
+    color: gray;
+    height: 50px;
+    vertical-align: middle;
+    width: 760px;
+    margin-bottom: 5px;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info .task-name {
+    margin: 5px 0px 0px 0px;
+    font-size: 15px;
+    color: black;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info .labels {
+    margin: 0px 0px 5px 0px;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list li i {
+    vertical-align: middle;
+    margin: 0px 25px 0px 40px;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .task i {
+    color: #2564cf;
+    height: 25px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .origin-feature .add-task {
+    display: inline-block;
+    margin-left: 700px;
+    border: 1px solid gray;
+    background-color: #ffffff;
+    font-size: 13px;
+    height: 28px;
+    width: 38px;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .origin-feature .add-task:hover {
+    cursor: pointer;
+    background-color: #fafafa;
+}
+
+.container .bottom-container .center .center-main .task-list-origin .origin-feature .add-task div {
+    text-align: center;
+    margin-top: 4px;
 }
