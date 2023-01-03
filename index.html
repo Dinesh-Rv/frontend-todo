@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom - To Do</title>
+    <script
+      src="https://kit.fontawesome.com/4d9bbb9621.js"
+      crossorigin="anonymous"
+    ></script>
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -39,51 +43,14 @@
         </div>
       </div>
       <div class="bottom-container">
-        <div class="left-side">
-          <div class="menu-icon">
+        <div class="left-side" id="left-side">
+          <div class="menu-icon" onclick="hideLeftSide()">
             <i class="material-icons">menu</i>
           </div>
           <div class="sidebar-content">
-            <ul class="sidebar-main" id="sidebar-main">
-              <li class="selective">
-                <div class="left-side-icon">
-                  <i class="material-icons">light_mode</i>
-                </div>
-                <p class="selective-info">My Day</p>
-              </li>
-              <li class="selective">
-                <div class="left-side-icon">
-                  <i class="material-icons">star</i>
-                </div>
-                <p class="selective-info">Important</p>
-              </li>
-              <li class="selective">
-                <div class="left-side-icon">
-                  <i class="material-icons">calendar_month</i>
-                </div>
-                <p class="selective-info">Planned</p>
-              </li>
-              <li class="selective">
-                <div class="left-side-icon">
-                  <i class="material-icons">person</i>
-                </div>
-                <p class="selective-info">Assigned to me</p>
-              </li>
-              <li class="selective">
-                <div class="left-side-icon">
-                  <i class="material-icons">flag</i>
-                </div>
-                <p class="selective-info">Flagged email</p>
-              </li>
-              <li class="selective">
-                <div class="left-side-icon">
-                  <i class="material-icons">home</i>
-                </div>
-                <p class="selective-info">Tasks</p>
-              </li>
-              <hr />
-              <div id="sortable-list" class="sortable-list"></div>
-            </ul>
+            <ul class="sidebar-main" id="sidebar-list"></ul>
+            <hr />
+            <ul id="group-list" class="group-list"></ul>
             <div class="sidebar-center">
               <ul id="to-do-vault-list" class="to-do-vault-list"></ul>
               <div class="add-new-list">
@@ -91,11 +58,7 @@
                   <i class="material-icons">add</i>
                 </div>
                 <div class="new-list-text">
-                  <input
-                    type="text"
-                    id="to-do-vault-name"
-                    placeholder="New List"
-                  />
+                  <input type="text" id="new-list" placeholder="New List" />
                 </div>
               </div>
               <div class="create-group-icon">
@@ -121,10 +84,10 @@
             </div>
           </div>
         </div>
-        <div class="center-main">
+        <div div class="center">
           <div class="center-head">
-            <div class="center-head-icon">
-              <i class="material-icons">light_mode</i>
+            <div class="center-head-icon" onclick="openLeftSide()">
+              <i class="material-icons" id="center-head-icon">light_mode</i>
             </div>
             <div class="center-head-desc">
               <p>My Day</p>
@@ -132,6 +95,12 @@
             <div class="date-info">
               <p id="current-date"></p>
             </div>
+          </div>
+          <div class="center-main">
+            <div class="task-list-origin">
+              <i class="fa-regular fa-circle"></i>
+            </div>
+            <input type="text" class="to-do-name" id="to-do-name" />
           </div>
         </div>
       </div>
