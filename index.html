@@ -42,15 +42,21 @@
           </button>
         </div>
       </div>
+      <!-- Bottom Container which contains most of the interactive feature -->
       <div class="bottom-container">
+        <!-- Left side contains category, list creation and accesibilities -->
         <div class="left-side" id="left-side">
           <div class="menu-icon" onclick="hideLeftSide()">
             <i class="material-icons">menu</i>
           </div>
+          <!-- Sidebar content to set scrollable -->
           <div class="sidebar-content">
+            <!-- List for holding task category -->
             <ul class="sidebar-main" id="sidebar-list"></ul>
             <hr />
+            <!-- List for holding current and upcomming group for tasks -->
             <ul id="group-list" class="group-list"></ul>
+            <!-- Center in left side which has the feature to add new list -->
             <div class="sidebar-center">
               <ul id="to-do-vault-list" class="to-do-vault-list"></ul>
               <div class="add-new-list">
@@ -66,6 +72,7 @@
               </div>
             </div>
           </div>
+          <!-- Contains extra features in left side -->
           <div class="sidebar-bottom">
             <div class="accessibility">
               <i class="material-icons">mail</i>
@@ -84,6 +91,7 @@
             </div>
           </div>
         </div>
+        <!-- Center contains the main interactive element in the webpage -->
         <div div class="center">
           <div class="center-head">
             <div class="center-head-icon" onclick="openLeftSide()">
@@ -96,11 +104,31 @@
               <p id="current-date"></p>
             </div>
           </div>
+          <!-- Contains task addition feature and other additional stuffs -->
           <div class="center-main">
             <div class="task-list-origin">
               <i class="fa-regular fa-circle"></i>
+              <div class="to-do-input">
+                <!-- Input for task name -->
+                <input
+                  type="text"
+                  class="task-input"
+                  id="task-input"
+                  placeholder="Add a task"
+                />
+              </div>
+              <div class="origin-feature">
+                <i class="material-icons">calendar_month</i>
+                <i class="material-icons">notifications</i>
+                <i class="material-icons">repeat</i>
+                <div class="add-task">
+                  <div type="button">Add</div>
+                </div>
+              </div>
             </div>
-            <input type="text" class="to-do-name" id="to-do-name" />
+            <div class="task-list-container">
+              <ul class="task-list" id="task-list"></ul>
+            </div>
           </div>
         </div>
       </div>
