@@ -52,22 +52,18 @@
           <!-- Sidebar content to set scrollable -->
           <div class="sidebar-content">
             <!-- List for holding task category -->
-            <ul class="sidebar-main" id="sidebar-list"></ul>
-            <hr />
-            <!-- List for holding current and upcomming group for tasks -->
-            <ul id="group-list" class="group-list"></ul>
+            <ul class="sidebar-category" id="sidebar-category"></ul>
             <!-- Center in left side which has the feature to add new list -->
             <div class="sidebar-center">
-              <ul id="to-do-vault-list" class="to-do-vault-list"></ul>
               <div class="add-new-list">
                 <div class="left-side-icon">
                   <i class="material-icons">add</i>
                 </div>
                 <div class="new-list-text">
-                  <input type="text" id="new-list" placeholder="New List" />
+                  <input type="text" id="new-category" placeholder="New List" />
                 </div>
               </div>
-              <div class="create-group-icon">
+              <div class="create-group-icon" id="submit-new-category">
                 <i class="material-icons">assignment_add</i>
               </div>
             </div>
@@ -98,7 +94,7 @@
               <i class="material-icons" id="center-head-icon">light_mode</i>
             </div>
             <div class="center-head-desc">
-              <p>My Day</p>
+              <p id="main-head">My Day</p>
             </div>
             <div class="date-info">
               <p id="current-date"></p>
@@ -121,8 +117,8 @@
                 <i class="material-icons">calendar_month</i>
                 <i class="material-icons">notifications</i>
                 <i class="material-icons">repeat</i>
-                <div class="add-task">
-                  <div type="button">Add</div>
+                <div class="add-task" id="add-task">
+                  <div>Add</div>
                 </div>
               </div>
             </div>
