@@ -23,25 +23,43 @@ html body {
     vertical-align: middle;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .material-icons,
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .category-info {
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .material-icons,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .category-text,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected .category-text {
     display: inline-block;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective {
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .category-id,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected .category-id {
+    display: none;
+}
+
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category {
     height: 45px;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .material-icons,
-.container .bottom-container .left-side .sidebar-content .group-list li .material-icons {
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected {
+    height: 45px;
+}
+
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .material-icons,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected .material-icons {
     padding-left: 23px;
     vertical-align: middle;
     color: #3f3e3d;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective .category-info {
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .category-text,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected .category-text {
     margin-left: 15px;
     vertical-align: middle;
+}
+
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category p,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected p,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category i,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected i {
+    pointer-events: none;
 }
 
 .container .top-container .to-do-link {
@@ -114,7 +132,7 @@ html body {
     margin-top: 3px;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-main {
+.container .bottom-container .left-side .sidebar-content .sidebar-category {
     display: inline-block;
     font-size: 14px;
     list-style: none;
@@ -124,27 +142,11 @@ html body {
     margin-bottom: 2px;
 }
 
-.container .bottom-container .left-side .sidebar-content .group-list {
-    font-size: 14px;
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected {
+    background-color: #eff6fc;
 }
 
-.container .bottom-container .left-side .sidebar-content .group-list {
-    list-style: none;
-    padding-left: 0px;
-}
-
-.container .bottom-container .left-side .sidebar-content .group-list li .material-icons {
-    padding-right: 18px;
-}
-
-.container .bottom-container .left-side .sidebar-content .group-list li p,
-.container .bottom-container .left-side .sidebar-content .group-list li .material-icons {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.container .bottom-container .left-side .sidebar-content .sidebar-main .selective:hover,
-.container .bottom-container .left-side .sidebar-content .group-list li:hover,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category:hover,
 .container .bottom-container .center .center-main .task-list-container .task-list li:hover {
     cursor: pointer;
     background-color: #f5f5f5;
@@ -169,7 +171,7 @@ html body {
 }
 
 .container .bottom-container .left-side hr {
-    width: 250px;
+    width: 230px;
     height: 0.1px;
     border-radius: 0.5px;
     border: 0px;

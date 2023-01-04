@@ -6,45 +6,92 @@
   const DISPLAY = "1";
   const OBJECT = "2";
   const UNTITLED = "Untitled Text";
+
   const categories = [
     {
+      id: 1,
       icon: "light_mode",
-      info: "My Day",
+      text: "My Day",
     },
     {
+      id: 2,
       icon: "star",
-      info: "Important",
+      text: "Important",
     },
     {
+      id: 3,
       icon: "calendar_month",
-      info: "Planned",
+      text: "Planned",
     },
     {
+      id: 4,
       icon: "person",
-      info: "Assigned to me",
+      text: "Assigned to me",
     },
     {
+      id: 5,
       icon: "home",
-      info: "Tasks",
+      text: "Tasks",
     },
   ];
+  let categoryId = 6;
 
-  let toDoGroupId = 0;
-
-  const toDoGroupList = [];
-
-  let taskId = 0;
+  let taskId = 1;
 
   const tasks = [];
 
+  let selectedCategory = categories[0];
+  const NEW_CATEGORY = document.getElementById("new-category");
+  const NEW_TASK = document.getElementById("task-input");
+  const ADD_TASK_BUTTON = document.getElementById("add-task");
+  const CATEGORY_LIST = document.getElementsByClassName("category");
   /**
    * main init function which calls the corresponding functions
    */
   function init() {
     getCurrentDate(DISPLAY);
-    renderCategory(categories);
-    addToDoGroup();
-    processTaskName();
+    renderCategory();
+    renderSelectedCategory();
+    events();
+  }
+
+  /**
+   * Checks the event from the user to call the necessary function
+   * in case of a user enters a text and adds a response key it submits a
+   * request of a entered text to add using event listener
+   */
+  function events() {
+    NEW_CATEGORY.addEventListener("keypress", addCategory);
+    NEW_TASK.addEventListener("keypress", addTask);
+    ADD_TASK_BUTTON.addEventListener("click", addTask);
+
+    for (let i = 0; i < CATEGORY_LIST.length; i++) {
+      CATEGORY_LIST[i].addEventListener("click", applySelectedCategory);
+    }
+  }
+
+  function applySelectedCategory(event) {
+    for (let i = 0; i < categories.length; i++) {
+      if (categories[i].id == event.target.id) {
+        const currentCategory = document.getElementsByClassName("category-selected")[0];
+        currentCategory.classList = "category";
+        document.getElementById("main-head").innerText = categories[i].text;
+        // removeOldCategoryHighlight();
+        selectedCategory = categories[i];
+        renderSelectedCategory();
+      }
+    }
+    // selectedCategory =
+    //   event.target.getElementsByClassName("category-id")[0].innerText;
+    // event.target.classList = "category-selected";
+  }
+
+  function renderSelectedCategory() {
+    for (let i = 0; i < CATEGORY_LIST.length; i++) {
+      if (CATEGORY_LIST[i].id == selectedCategory.id) {
+        CATEGORY_LIST[i].className = "category-selected";
+      }
+    }
   }
 
   /**
@@ -63,6 +110,9 @@
     if (element.content !== undefined) {
       createdElement.innerText = element.content;
     }
+    if (element.id !== undefined) {
+      createdElement.id = element.id;
+    }
     return createdElement;
   }
 
@@ -74,15 +124,40 @@
    * and day as in number
    */
   function getCurrentDate(type) {
-    const date = new Date().toLocaleDateString("en-us", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    });
+    const date = new Date();
     if (type === DISPLAY) {
-      document.getElementById("current-date").outerHTML = date;
+      document.getElementById("current-date").outerHTML =
+        date.toLocaleDateString("en-us", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+        });
     } else if (type === OBJECT) {
       return date;
+    }
+  }
+
+  /**
+   * Adds a new group for todo list
+   * In which groups can be mentioned as the to-do-list holder
+   * they contain list of to-do-list
+   * groups adds up when the user enters the text and pressed the enter key
+   * @param {*} event
+   */
+  function addCategory(event) {
+    if (event.key === "Enter") {
+      if (NEW_CATEGORY.value === "") {
+        NEW_CATEGORY.value = UNTITLED;
+      }
+      categories.push({
+        id: categoryId,
+        icon: "list",
+        text: NEW_CATEGORY.value,
+      });
+      console.log(categories);
+      renderCategory();
+      NEW_CATEGORY.value = "";
+      categoryId++;
     }
   }
 
@@ -92,86 +167,27 @@
    *
    */
   function renderCategory() {
-    let categoryList = document.getElementById("sidebar-list");
+    let CATEGORY_LIST = document.getElementById("sidebar-category");
+    CATEGORY_LIST.innerHTML = "";
     categories.forEach((category) => {
       let listItem = createHTMLElement("li", {
-        className: "selective",
+        className: "category",
+        id: category.id,
       });
       let icon = createHTMLElement("i", {
         className: "material-icons",
         content: category.icon,
       });
-      let info = createHTMLElement("p", {
-        content: category.info,
-        className: "category-info",
-      });
-      categoryList.appendChild(listItem);
-      listItem.appendChild(icon);
-      listItem.appendChild(info);
-    });
-  }
-
-  /**
-   * Adds a new group for todo list
-   * In which groups can be mentioned as the to-do-list holder
-   * they contain list of to-do-list
-   * groups adds up when the user enters the text and pressed the enter key
-   */
-  function addToDoGroup() {
-    let toDoGroup = document.getElementById("new-list");
-    toDoGroup.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        console.log(toDoGroup.value);
-        if (toDoGroup.value === "") {
-          toDoGroup.value = UNTITLED;
-        }
-        toDoGroupList.push({
-          id: toDoGroupId,
-          icon: "list",
-          text: toDoGroup.value,
-        });
-        console.log(toDoGroupList);
-        renderToDoGroup();
-        toDoGroup.value = "";
-        toDoGroup++;
-      }
-    });
-  }
-
-  /**
-   * Renders to do group for the webpage
-   * to do group contains list of tasks in to do list
-   */
-  function renderToDoGroup() {
-    let toDoGroups = document.getElementById("group-list");
-    toDoGroups.innerHTML = "";
-    toDoGroupList.forEach((toDoGroup) => {
-      let listItem = createHTMLElement("li", {
-        className: "group",
-      });
-      let icon = createHTMLElement("i", {
-        className: "material-icons",
-        content: toDoGroup.icon,
-      });
       let text = createHTMLElement("p", {
-        content: toDoGroup.text,
+        content: category.text,
+        className: "category-text",
       });
-      toDoGroups.appendChild(listItem);
+      CATEGORY_LIST.appendChild(listItem);
       listItem.appendChild(icon);
       listItem.appendChild(text);
-    });
-  }
-
-  /**
-   * Processes the input task from the user, because user can
-   * submit the task by pressing enter or by clicking an submit event
-   */
-  function processTaskName() {
-    let taskName = document.getElementById("task-input");
-    taskName.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        addTask(taskName.value);
-        taskName.value = "";
+      if (category.id == 5) {
+        let hr = createHTMLElement("hr", { className: "split-category" });
+        CATEGORY_LIST.appendChild(hr);
       }
     });
   }
@@ -182,23 +198,25 @@
    * Tasks can be divided upon categories for ease of use
    * Tasks has status to mention if the task is finished or not
    */
-  function addTask(taskName) {
-    if (taskName === "") {
-      taskName = UNTITLED;
+  function addTask(event) {
+    if (event.key === "Enter" || event.type == "click") {
+      if (NEW_TASK.value === "") {
+        NEW_TASK.value = "";
+      } else {
+        tasks.push({
+          id: taskId,
+          class: "task-element",
+          name: NEW_TASK.value,
+          taskStatus: false,
+          createdAt: getCurrentDate(OBJECT),
+          categoryId: selectedCategory.id,
+        });
+        console.log(tasks);
+        renderTasks();
+        taskId++;
+        NEW_TASK.value = "";
+      }
     }
-    tasks.push({
-      id: taskId,
-      class: "task-element",
-      name: taskName,
-      taskStatus: false,
-      createdAt: getCurrentDate(OBJECT),
-      category: null,
-      group: null,
-    });
-    console.log(tasks);
-    renderTasks();
-    taskId++;
-    taskName = "";
   }
 
   /**
