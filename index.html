@@ -46,7 +46,7 @@
       <div class="bottom-container">
         <!-- Left side contains category, list creation and accesibilities -->
         <div class="left-side" id="left-side">
-          <div class="menu-icon" onclick="hideLeftSide()">
+          <div class="menu-icon">
             <i class="material-icons">menu</i>
           </div>
           <!-- Sidebar content to set scrollable -->
@@ -89,7 +89,7 @@
         </div>
         <!-- Center contains the main interactive element in the webpage -->
         <div div class="center">
-          <div class="center-head">
+          <div class="center-head" id="center-head">
             <div class="center-head-icon" onclick="openLeftSide()">
               <i class="material-icons" id="center-head-icon">light_mode</i>
             </div>
@@ -103,7 +103,9 @@
           <!-- Contains task addition feature and other additional stuffs -->
           <div class="center-main">
             <div class="task-list-origin">
-              <i class="fa-regular fa-circle"></i>
+              <div class="unchecked-circle">
+                <i class="fa-regular fa-circle"></i>
+              </div>
               <div class="to-do-input">
                 <!-- Input for task name -->
                 <input
@@ -124,6 +126,34 @@
             </div>
             <div class="task-list-container">
               <ul class="task-list" id="task-list"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="right-side">
+          <div class="right-side-top">
+            <div class="right-side-main">
+              <div class="task-console-top">
+                <div class="selected-task">
+                  <i class="fa-regular fa-circle"></i>
+                  <p>The task</p>
+                </div>
+                <div class="task-steps">
+                  <i class="fa-regular fa-circle"></i>
+                  <p>Add step</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="right-side-bottom">
+            <div class="hide-right-side">
+              <i class="material-icons">logout</i>
+            </div>
+            <div class="task-created-at">
+              <p>Created Today</p>
+            </div>
+            <div class="delete-selected-task">
+              <i class="material-icons">delete</i>
             </div>
           </div>
         </div>

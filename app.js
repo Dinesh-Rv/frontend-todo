@@ -7,7 +7,7 @@
   const OBJECT = "2";
   const UNTITLED = "Untitled Text";
 
-  const categories = [
+  const CATEGORIES = [
     {
       id: 1,
       icon: "light_mode",
@@ -34,25 +34,28 @@
       text: "Tasks",
     },
   ];
-  let categoryId = 6;
+  let categoryId = 5;
 
   let taskId = 1;
 
-  const tasks = [];
+  const TASKS = [];
 
-  let selectedCategory = categories[0];
+  let selectedCategory = CATEGORIES[0];
+  let selectedTask;
   const NEW_CATEGORY = document.getElementById("new-category");
   const NEW_TASK = document.getElementById("task-input");
   const ADD_TASK_BUTTON = document.getElementById("add-task");
   const CATEGORY_LIST = document.getElementsByClassName("category");
+  const TASK_LIST = document.getElementsByClassName("task-element");
+
   /**
    * main init function which calls the corresponding functions
    */
   function init() {
     getCurrentDate(DISPLAY);
     renderCategory();
+    //selectedCategory = CATEGORIES[0];
     renderSelectedCategory();
-    events();
   }
 
   /**
@@ -68,17 +71,43 @@
     for (let i = 0; i < CATEGORY_LIST.length; i++) {
       CATEGORY_LIST[i].addEventListener("click", applySelectedCategory);
     }
+    for (let i = 0; i < TASK_LIST.length; i++) {
+      CATEGORY_LIST[i].addEventListener("click", applySelectedTask);
+    }
+  }
+
+  function applySelectedTask(event) {
+    for (let i = 0; i < TASKS.length; i++) {
+      if (TASKS[i].id == event.target.id) {
+        selectedTask = TASKS[i];
+      }
+      renderSelectedTask();
+    }
+  }
+
+  function renderSelectedTask() {
+    for (let i = 0; i < TASK_LIST.length; i++) {
+      if (TASK_LIST[i].id == selectedTask.id) {
+        TASK_LIST[i].className;
+      }
+    }
   }
 
   function applySelectedCategory(event) {
-    for (let i = 0; i < categories.length; i++) {
-      if (categories[i].id == event.target.id) {
-        const currentCategory = document.getElementsByClassName("category-selected")[0];
-        currentCategory.classList = "category";
-        document.getElementById("main-head").innerText = categories[i].text;
-        // removeOldCategoryHighlight();
-        selectedCategory = categories[i];
-        renderSelectedCategory();
+    if (event == null) {
+      renderTasks();
+      renderSelectedCategory();
+    } else {
+      for (let i = 0; i < CATEGORIES.length; i++) {
+        if (CATEGORIES[i].id == event.target.id) {
+          let currentCategory = document.getElementById(selectedCategory.id);
+          currentCategory.classList = "category";
+          selectedCategory = CATEGORIES[i];
+          // removeOldCategoryHighlight();
+          // event.target.className = "category-selected";
+          renderTasks();
+          renderSelectedCategory();
+        }
       }
     }
     // selectedCategory =
@@ -90,6 +119,12 @@
     for (let i = 0; i < CATEGORY_LIST.length; i++) {
       if (CATEGORY_LIST[i].id == selectedCategory.id) {
         CATEGORY_LIST[i].className = "category-selected";
+        let centerHead = document.getElementsByClassName("center-head")[0];
+        centerHead.childNodes[1].childNodes[1].innerText =
+          selectedCategory.icon;
+        centerHead.childNodes[3].childNodes[1].innerText =
+          selectedCategory.text;
+        events();
       }
     }
   }
@@ -124,14 +159,13 @@
    * and day as in number
    */
   function getCurrentDate(type) {
-    const date = new Date();
+    const date = new Date().toLocaleDateString("en-us", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
     if (type === DISPLAY) {
-      document.getElementById("current-date").outerHTML =
-        date.toLocaleDateString("en-us", {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-        });
+      document.getElementById("current-date").innerText = date;
     } else if (type === OBJECT) {
       return date;
     }
@@ -149,15 +183,16 @@
       if (NEW_CATEGORY.value === "") {
         NEW_CATEGORY.value = UNTITLED;
       }
-      categories.push({
-        id: categoryId,
+      CATEGORIES.push({
+        id: ++categoryId,
         icon: "list",
         text: NEW_CATEGORY.value,
       });
-      console.log(categories);
+      console.log(CATEGORIES);
+      selectedCategory = CATEGORIES[categoryId - 1];
       renderCategory();
       NEW_CATEGORY.value = "";
-      categoryId++;
+      applySelectedCategory();
     }
   }
 
@@ -169,7 +204,7 @@
   function renderCategory() {
     let CATEGORY_LIST = document.getElementById("sidebar-category");
     CATEGORY_LIST.innerHTML = "";
-    categories.forEach((category) => {
+    CATEGORIES.forEach((category) => {
       let listItem = createHTMLElement("li", {
         className: "category",
         id: category.id,
@@ -203,7 +238,7 @@
       if (NEW_TASK.value === "") {
         NEW_TASK.value = "";
       } else {
-        tasks.push({
+        TASKS.push({
           id: taskId,
           class: "task-element",
           name: NEW_TASK.value,
@@ -211,7 +246,7 @@
           createdAt: getCurrentDate(OBJECT),
           categoryId: selectedCategory.id,
         });
-        console.log(tasks);
+        console.log(TASKS);
         renderTasks();
         taskId++;
         NEW_TASK.value = "";
@@ -226,40 +261,43 @@
   function renderTasks() {
     let taskList = document.getElementById("task-list");
     taskList.innerHTML = "";
-    let sortedTasks = tasks.reverse();
+    let selectedCategoryId = selectedCategory.id;
+    let sortedTasks = TASKS.reverse();
     sortedTasks.forEach((task) => {
-      let listItem = createHTMLElement("li", {
-        className: "task",
-      });
-      let icon = createHTMLElement("i", {
-        className: "fa-regular fa-circle",
-      });
-      let taskInfoDiv = createHTMLElement("div", {
-        className: "task-info",
-      });
-      let text = createHTMLElement("p", {
-        className: "task-name",
-        content: task.name,
-      });
-      let footer = createHTMLElement("p", {
-        className: "labels",
-        content: "Tasks",
-      });
-      let impIconDiv = createHTMLElement("p", {
-        className: "important-icon",
-      });
-      let importantIcon = createHTMLElement("i", {
-        className: "fa-regular fa-star",
-      });
-      taskList.appendChild(listItem);
-      listItem.appendChild(icon);
-      listItem.appendChild(taskInfoDiv);
-      taskInfoDiv.appendChild(text);
-      taskInfoDiv.appendChild(footer);
-      listItem.appendChild(impIconDiv);
-      impIconDiv.appendChild(importantIcon);
+      if (selectedCategoryId == task.categoryId) {
+        let listItem = createHTMLElement("li", {
+          className: "task",
+        });
+        let icon = createHTMLElement("i", {
+          className: "fa-regular fa-circle",
+        });
+        let taskInfoDiv = createHTMLElement("div", {
+          className: "task-info",
+        });
+        let text = createHTMLElement("p", {
+          className: "task-name",
+          content: task.name,
+        });
+        let footer = createHTMLElement("p", {
+          className: "labels",
+          content: "Tasks",
+        });
+        let impIconDiv = createHTMLElement("p", {
+          className: "important-icon",
+        });
+        let importantIcon = createHTMLElement("i", {
+          className: "fa-regular fa-star",
+        });
+        taskList.appendChild(listItem);
+        listItem.appendChild(icon);
+        listItem.appendChild(taskInfoDiv);
+        taskInfoDiv.appendChild(text);
+        taskInfoDiv.appendChild(footer);
+        listItem.appendChild(impIconDiv);
+        impIconDiv.appendChild(importantIcon);
+      }
     });
-    sortedTasks = tasks.reverse();
+    sortedTasks = TASKS.reverse();
   }
 
   init(); //calling init method
