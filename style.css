@@ -144,6 +144,7 @@ html body {
 
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected {
     background-color: #eff6fc;
+    font-weight: bold;
 }
 
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category:hover,
@@ -255,6 +256,7 @@ html body {
 
 .container .bottom-container .center {
     height: 560px;
+    width: 47%;
 }
 
 .container .bottom-container .left-side,
@@ -289,7 +291,7 @@ html body {
 }
 
 .container .bottom-container .center .center-head {
-    width: 935px;
+    width: 80%
 }
 
 .container .bottom-container .center .center-head .date-info {
@@ -299,10 +301,9 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-origin {
     background-color: white;
-    width: 940px;
     height: 110px;
     margin-left: 25px;
-    text-align: center;
+    text-align: left;
     box-shadow: 1px 1px 3px gray;
     border-radius: 3px;
 }
@@ -313,9 +314,14 @@ html body {
     vertical-align: middle;
 }
 
+.container .bottom-container .center .center-main .task-list-origin .unchecked-circle {
+    display: inline-block;
+    margin-left: 6.5%;
+}
+
 .container .bottom-container .center .center-main .task-list-origin .to-do-input input {
     height: 53px;
-    width: 800px;
+    width: 250%;
     border: 0px none;
     outline: none;
     font-size: 15px;
@@ -327,14 +333,13 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature {
     height: 45px;
-    width: 905px;
     text-align: left;
     background-color: #f5f5f5;
-    padding: 10px 0px 0px 35px;
+    padding: 2% 0% 0% 5%;
 }
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature .material-icons {
-    margin-right: 15px;
+    margin-right: 2%;
 }
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature .material-icons:hover {
@@ -344,7 +349,7 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-container {
     height: 345px;
-    width: 985px;
+    width: 598px;
     overflow-y: auto;
 }
 
@@ -354,8 +359,9 @@ html body {
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list li {
-    width: 940px;
     height: 50px;
+    width: 570px;
+    display: block;
     background-color: #ffffff;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -372,8 +378,8 @@ html body {
     font-size: 13px;
     color: gray;
     height: 50px;
+    width: 78%;
     vertical-align: middle;
-    width: 760px;
     margin-bottom: 5px;
 }
 
@@ -389,7 +395,7 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-container .task-list li i {
     vertical-align: middle;
-    margin: 0px 25px 0px 40px;
+    margin: 0% 5% 0% 7%;
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list .task i {
@@ -398,8 +404,8 @@ html body {
 }
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature .add-task {
+    margin-left: 65%;
     display: inline-block;
-    margin-left: 700px;
     border: 1px solid gray;
     background-color: #ffffff;
     font-size: 13px;
@@ -415,4 +421,83 @@ html body {
 .container .bottom-container .center .center-main .task-list-origin .origin-feature .add-task div {
     text-align: center;
     margin-top: 4px;
+}
+
+.container .bottom-container .right-side {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 6px;
+    height: 560px;
+    padding: 0px 20px 0px 30px;
+    width: 24%;
+    background-color: #faf9f8;
+}
+
+.container .bottom-container .right-side .right-side-top {
+    height: 470px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main {
+    background-color: #ffffff;
+    margin-top: 20px;
+    height: 107px;
+    width: 300px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task p {
+    display: inline-block;
+    margin: 0px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps p {
+    padding-left: 16px;
+    width: 200px;
+    font-size: 14px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps {
+    padding: 16px;
+}
+
+.container .bottom-container .right-side .right-side-bottom {
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+
+.container .bottom-container .right-side .right-side-bottom .hide-right-side,
+.container .bottom-container .right-side .right-side-bottom .task-created-at,
+.container .bottom-container .right-side .right-side-bottom .delete-selected-task {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.container .bottom-container .right-side .right-side-bottom .task-created-at p {
+    width: 240px;
+    margin: 0px 0px 9px 0px;
+    text-align: center;
+}
+
+.container .bottom-container .right-side hr {
+    width: 300px;
+    height: 0.1px;
+    border-radius: 0.5px;
+    border: 0px;
+    background-color: gray;
+    opacity: 0.4;
+}
+
+/* For dynamic html */
+.container .bottom-container .right-side-closed {
+    display: none;
+}
+
+.container .bottom-container .center-wide {
+    height: 560px;
+    width: 605px;
 }
