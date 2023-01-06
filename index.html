@@ -88,7 +88,7 @@
           </div>
         </div>
         <!-- Center contains the main interactive element in the webpage -->
-        <div div class="center">
+        <div div class="center" id="center-block">
           <div class="center-head" id="center-head">
             <div class="center-head-icon" onclick="openLeftSide()">
               <i class="material-icons" id="center-head-icon">light_mode</i>
@@ -129,24 +129,30 @@
             </div>
           </div>
         </div>
-        <div class="right-side">
+        <div class="right-side" id="right-side">
           <div class="right-side-top">
             <div class="right-side-main">
-              <div class="task-console-top">
-                <div class="selected-task">
-                  <i class="fa-regular fa-circle"></i>
-                  <p>The task</p>
-                </div>
+              <div class="selected-task">
+                <i class="fa-regular fa-circle"></i>
+                <p>The task</p>
+              </div>
+              <div class="task-console">
                 <div class="task-steps">
                   <i class="fa-regular fa-circle"></i>
                   <p>Add step</p>
                 </div>
               </div>
+              <div class="my-day-status">
+                <p>Added To My Day</p>
+              </div>
+              <div class="selected-task-note">
+                <input class="add-note" type="text" placeholder="Add note" />
+              </div>
             </div>
           </div>
           <hr />
           <div class="right-side-bottom">
-            <div class="hide-right-side">
+            <div class="hide-right-side" id="hide-right-side">
               <i class="material-icons">logout</i>
             </div>
             <div class="task-created-at">

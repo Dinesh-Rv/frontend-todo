@@ -3,8 +3,10 @@
  * for certain variables and functions for the webpage
  */
 (function () {
-  const DISPLAY = "1";
-  const OBJECT = "2";
+  const DISPLAY = "display";
+  const OBJECT = "object";
+  const OPEN = "open";
+  const CLOSE = "close";
   const UNTITLED = "Untitled Text";
 
   const CATEGORIES = [
@@ -41,27 +43,30 @@
   const TASKS = [];
 
   let selectedCategory = CATEGORIES[0];
-  let selectedTask;
+  let selectedTask = null;
   const NEW_CATEGORY = document.getElementById("new-category");
   const NEW_TASK = document.getElementById("task-input");
   const ADD_TASK_BUTTON = document.getElementById("add-task");
   const CATEGORY_LIST = document.getElementsByClassName("category");
-  const TASK_LIST = document.getElementsByClassName("task-element");
-
+  const TASK_LIST = document.getElementsByClassName("task");
+  const RIGHT_SIDE = document.getElementById("right-side");
   /**
    * main init function which calls the corresponding functions
    */
   function init() {
     getCurrentDate(DISPLAY);
     renderCategory();
-    //selectedCategory = CATEGORIES[0];
+    renderTasks();
     renderSelectedCategory();
+    controlRightSide(CLOSE);
+    events();
   }
 
   /**
    * Checks the event from the user to call the necessary function
    * in case of a user enters a text and adds a response key it submits a
    * request of a entered text to add using event listener
+   *
    */
   function events() {
     NEW_CATEGORY.addEventListener("keypress", addCategory);
@@ -71,26 +76,72 @@
     for (let i = 0; i < CATEGORY_LIST.length; i++) {
       CATEGORY_LIST[i].addEventListener("click", applySelectedCategory);
     }
+
     for (let i = 0; i < TASK_LIST.length; i++) {
-      CATEGORY_LIST[i].addEventListener("click", applySelectedTask);
+      TASK_LIST[i].addEventListener("click", applySelectedTask);
     }
+
+    RIGHT_SIDE.getElementsByClassName("hide-right-side")[0].addEventListener(
+      "click",
+      controlRightSide
+    );
   }
 
   function applySelectedTask(event) {
-    for (let i = 0; i < TASKS.length; i++) {
-      if (TASKS[i].id == event.target.id) {
-        selectedTask = TASKS[i];
-      }
+    if (event == null) {
       renderSelectedTask();
+    } else {
+      if (selectedTask != null) {
+        removeTaskHighlight();
+      }
+      for (let i = 0; i < TASKS.length; i++) {
+        if (TASKS[i].id == event.target.id) {
+          if (selectedTask != TASKS[i]) {
+            selectedTask = TASKS[i];
+            renderSelectedTask();
+          }
+        }
+      }
     }
+  }
+
+  function removeTaskHighlight() {
+    const CURRENT_TASK =
+      document.getElementsByClassName("user-selected-task")[0];
+    CURRENT_TASK.className = "task";
   }
 
   function renderSelectedTask() {
     for (let i = 0; i < TASK_LIST.length; i++) {
+      console.log(TASK_LIST[i].id);
       if (TASK_LIST[i].id == selectedTask.id) {
-        TASK_LIST[i].className;
+        TASK_LIST[i].className = "user-selected-task";
+        renderRightSide();
       }
     }
+    events();
+  }
+
+  function renderRightSide() {
+    RIGHT_SIDE.className = "right-side";
+    let rightSideHead =
+      RIGHT_SIDE.getElementsByClassName(
+        "selected-task"
+      )[0].getElementsByTagName("p")[0];
+    rightSideHead.innerText = selectedTask.name;
+    controlRightSide(OPEN);
+  }
+
+  function controlRightSide(adjust) {
+    const CENTER = document.getElementById("center-block");
+    if (adjust == CLOSE || adjust.type == "click") {
+      //   CENTER.className = "center center-wide";
+      //   RIGHT_SIDE.className = "right-side-closed";
+    } else if (adjust == OPEN) {
+      CENTER.className = "center";
+      RIGHT_SIDE.className = "right-side";
+    }
+    events();
   }
 
   function applySelectedCategory(event) {
@@ -100,19 +151,21 @@
     } else {
       for (let i = 0; i < CATEGORIES.length; i++) {
         if (CATEGORIES[i].id == event.target.id) {
-          let currentCategory = document.getElementById(selectedCategory.id);
-          currentCategory.classList = "category";
           selectedCategory = CATEGORIES[i];
-          // removeOldCategoryHighlight();
-          // event.target.className = "category-selected";
+          removeCategoryHighlight();
           renderTasks();
           renderSelectedCategory();
+          controlRightSide(CLOSE);
         }
       }
     }
-    // selectedCategory =
-    //   event.target.getElementsByClassName("category-id")[0].innerText;
-    // event.target.classList = "category-selected";
+  }
+
+  function removeCategoryHighlight() {
+    const CURRENT_CATEGORY =
+      document.getElementsByClassName("category-selected")[0];
+    CURRENT_CATEGORY.className = "category";
+    selectedTask = null;
   }
 
   function renderSelectedCategory() {
@@ -124,9 +177,9 @@
           selectedCategory.icon;
         centerHead.childNodes[3].childNodes[1].innerText =
           selectedCategory.text;
-        events();
       }
     }
+    events();
   }
 
   /**
@@ -246,10 +299,10 @@
           createdAt: getCurrentDate(OBJECT),
           categoryId: selectedCategory.id,
         });
-        console.log(TASKS);
         renderTasks();
         taskId++;
         NEW_TASK.value = "";
+        applySelectedTask();
       }
     }
   }
@@ -267,6 +320,7 @@
       if (selectedCategoryId == task.categoryId) {
         let listItem = createHTMLElement("li", {
           className: "task",
+          id: task.id,
         });
         let icon = createHTMLElement("i", {
           className: "fa-regular fa-circle",
@@ -298,6 +352,7 @@
       }
     });
     sortedTasks = TASKS.reverse();
+    events();
   }
 
   init(); //calling init method
