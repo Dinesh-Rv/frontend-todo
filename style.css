@@ -58,7 +58,10 @@ html body {
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category p,
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected p,
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category i,
-.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected i {
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected i,
+.container .bottom-container .center .center-main .task-list-container .task-list li i,
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info p,
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info {
     pointer-events: none;
 }
 
@@ -319,9 +322,17 @@ html body {
     margin-left: 6.5%;
 }
 
+.container .bottom-container .center .center-main .task-list-origin .to-do-input {
+    width: 80%;
+}
+
+.container .bottom-container .center .center-main {
+    width: 100%;
+}
+
 .container .bottom-container .center .center-main .task-list-origin .to-do-input input {
     height: 53px;
-    width: 250%;
+    width: 100%;
     border: 0px none;
     outline: none;
     font-size: 15px;
@@ -348,8 +359,8 @@ html body {
 }
 
 .container .bottom-container .center .center-main .task-list-container {
-    height: 345px;
-    width: 598px;
+    height: 333px;
+    width: 100%;
     overflow-y: auto;
 }
 
@@ -360,7 +371,7 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-container .task-list li {
     height: 50px;
-    width: 570px;
+    width: 99.8%;
     display: block;
     background-color: #ffffff;
     margin-bottom: 10px;
@@ -369,12 +380,12 @@ html body {
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list li i,
-.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info,
-.container .bottom-container .center .center-main .task-list-container .task-list .important-icon {
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info,
+.container .bottom-container .center .center-main .task-list-container .task-list li .important-icon {
     display: inline-block;
 }
 
-.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info {
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info {
     font-size: 13px;
     color: gray;
     height: 50px;
@@ -383,13 +394,13 @@ html body {
     margin-bottom: 5px;
 }
 
-.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info .task-name {
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info .task-name {
     margin: 5px 0px 0px 0px;
     font-size: 15px;
     color: black;
 }
 
-.container .bottom-container .center .center-main .task-list-container .task-list .task .task-info .labels {
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info .labels {
     margin: 0px 0px 5px 0px;
 }
 
@@ -398,13 +409,13 @@ html body {
     margin: 0% 5% 0% 7%;
 }
 
-.container .bottom-container .center .center-main .task-list-container .task-list .task i {
+.container .bottom-container .center .center-main .task-list-container .task-list li i {
     color: #2564cf;
     height: 25px;
 }
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature .add-task {
-    margin-left: 65%;
+    margin-left: 66%;
     display: inline-block;
     border: 1px solid gray;
     background-color: #ffffff;
@@ -429,7 +440,8 @@ html body {
     margin-left: 6px;
     height: 560px;
     padding: 0px 20px 0px 30px;
-    width: 24%;
+    box-shadow: 1px 1px 3px gray;
+    width: 24.9%;
     background-color: #faf9f8;
 }
 
@@ -444,23 +456,23 @@ html body {
     width: 300px;
 }
 
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps i,
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps p,
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task i,
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task p {
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps p,
+.container .bottom-container .right-side .right-side-top .right-side-main .selected-task i,
+.container .bottom-container .right-side .right-side-top .right-side-main .selected-task p {
     display: inline-block;
     margin: 0px;
 }
 
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task p,
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps p {
+.container .bottom-container .right-side .right-side-top .right-side-main .selected-task p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps p {
     padding-left: 16px;
     width: 200px;
     font-size: 14px;
 }
 
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .selected-task,
-.container .bottom-container .right-side .right-side-top .right-side-main .task-console-top .task-steps {
+.container .bottom-container .right-side .right-side-top .right-side-main .selected-task,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps {
     padding: 16px;
 }
 
@@ -499,5 +511,24 @@ html body {
 
 .container .bottom-container .center-wide {
     height: 560px;
-    width: 605px;
+    width: 74%;
 }
+
+.container .bottom-container .center-wide .center-main .task-list-origin {
+    box-shadow: 0px 7px 4px grey;
+}
+
+.container .bottom-container .center-wide .center-main .task-list-origin .unchecked-circle {
+    margin-left: 5.5%;
+}
+
+.container .bottom-container .center-wide .center-main .task-list-container .task-list li i {
+    margin-left: 5.5%;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .user-selected-task {
+    background-color: #eff6fc;
+    pointer-events: none;
+}
+
+/* Dynamic ends here*/
