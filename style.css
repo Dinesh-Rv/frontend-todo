@@ -16,17 +16,19 @@ html body {
     margin-top: 0px;
 }
 
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .material-icons,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category .category-text,
+.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected .category-text,
 .container .top-container .apps-icon,
 .container .top-container .to-do-link,
 .container .top-container .search-bar {
     display: inline-block;
-    vertical-align: middle;
 }
 
-.container .bottom-container .left-side .sidebar-content .sidebar-category .category .material-icons,
-.container .bottom-container .left-side .sidebar-content .sidebar-category .category .category-text,
-.container .bottom-container .left-side .sidebar-content .sidebar-category .category-selected .category-text {
-    display: inline-block;
+.container .top-container .apps-icon,
+.container .top-container .to-do-link,
+.container .top-container .search-bar {
+    vertical-align: middle;
 }
 
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category .category-id,
@@ -204,7 +206,8 @@ html body {
     height: 450px;
 }
 
-.container .bottom-container .left-side .sidebar-content {
+.container .bottom-container .left-side .sidebar-content,
+.container .bottom-container .center .center-main .task-list-container {
     overflow-y: auto;
 }
 
@@ -361,7 +364,6 @@ html body {
 .container .bottom-container .center .center-main .task-list-container {
     height: 333px;
     width: 100%;
-    overflow-y: auto;
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list {
@@ -450,9 +452,9 @@ html body {
 }
 
 .container .bottom-container .right-side .right-side-top .right-side-main {
-    background-color: #ffffff;
+    font-size: 15px;
     margin-top: 20px;
-    height: 107px;
+    height: 100%;
     width: 300px;
 }
 
@@ -464,7 +466,13 @@ html body {
     margin: 0px;
 }
 
-.container .bottom-container .right-side .right-side-top .right-side-main .selected-task p,
+.container .bottom-container .right-side .right-side-top .right-side-main .selected-task p {
+    padding-left: 16px;
+    width: 200px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
 .container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps p {
     padding-left: 16px;
     width: 200px;
@@ -484,13 +492,27 @@ html body {
 
 .container .bottom-container .right-side .right-side-bottom .hide-right-side,
 .container .bottom-container .right-side .right-side-bottom .task-created-at,
-.container .bottom-container .right-side .right-side-bottom .delete-selected-task {
+.container .bottom-container .right-side .right-side-bottom .delete-selected-task,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .my-day-status i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .my-day-status p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .reminder p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .reminder i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .due-date p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .due-date i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .repeat-task p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .repeat-task i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .pick-category i,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .pick-category p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .add-file p,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .add-file i {
     display: inline-block;
     vertical-align: middle;
+    margin-left: 10px;
+    color: gray;
 }
 
 .container .bottom-container .right-side .right-side-bottom .task-created-at p {
-    width: 240px;
+    width: 210px;
     margin: 0px 0px 9px 0px;
     text-align: center;
 }
@@ -500,8 +522,87 @@ html body {
     height: 0.1px;
     border-radius: 0.5px;
     border: 0px;
+    margin-right: 20px;
     background-color: gray;
     opacity: 0.4;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .my-day-status,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .reminder,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .due-date,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .repeat-task,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .pick-category,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .add-file {
+    background-color: #ffffff;
+    border-radius: 2px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .selected-task-note {
+    width: 298px;
+    height: 95px;
+    background-color: #ffffff
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .selected-task-note .add-note {
+    border: 0px;
+    outline: none;
+    width: 95%;
+    margin-left: 10px;
+    height: 70%;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .selected-task-note .update-status {
+    margin-left: 10px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .selected-task-note .update-status p {
+    margin: 0px;
+    font-size: 13px;
+    opacity: 0.6;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .my-day-status,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .reminder,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .pick-category,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .add-file,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .selected-task-note {
+    margin-top: 10px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .selected-task-note {
+    margin-bottom: 10px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .due-date,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .repeat-task {
+    margin-top: 2px;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console {
+    height: 90%;
+    overflow-y: auto;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console::-webkit-scrollbar {
+    display: none;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .my-day-status:hover,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps:hover,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .reminder:hover,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .due-date:hover,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .repeat-task:hover,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .pick-category:hover,
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .add-file:hover {
+    background-color: #faf9f8;
+    cursor: pointer;
+}
+
+.container .bottom-container .right-side .right-side-bottom .hide-right-side:hover,
+.container .bottom-container .right-side .right-side-bottom .delete-selected-task:hover {
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
 /* For dynamic html */
@@ -509,26 +610,34 @@ html body {
     display: none;
 }
 
-.container .bottom-container .center-wide {
+.container .bottom-container .center-right-wide {
     height: 560px;
     width: 74%;
 }
 
-.container .bottom-container .center-wide .center-main .task-list-origin {
+.container .bottom-container .center-right-wide .center-main .task-list-origin {
     box-shadow: 0px 7px 4px grey;
 }
 
-.container .bottom-container .center-wide .center-main .task-list-origin .unchecked-circle {
+.container .bottom-container .center-right-wide .center-main .task-list-origin .unchecked-circle {
     margin-left: 5.5%;
 }
 
-.container .bottom-container .center-wide .center-main .task-list-container .task-list li i {
+.container .bottom-container .center-right-wide .center-main .task-list-container .task-list li i {
     margin-left: 5.5%;
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list .user-selected-task {
     background-color: #eff6fc;
     pointer-events: none;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .pick-category .material-icons {
+    transform: scaleX(-1);
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .task-console .add-file i {
+    transform: rotate(230deg);
 }
 
 /* Dynamic ends here*/
