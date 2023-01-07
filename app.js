@@ -1,6 +1,9 @@
 /**
  * Self invoking function which acts as a class
  * for certain variables and functions for the webpage
+ * Contains all the support for the todo webpage
+ * for organising the data such as
+ * tasks, categories and so on
  */
 (function () {
   const DISPLAY = "display";
@@ -8,6 +11,10 @@
   const OPEN = "open";
   const CLOSE = "close";
   const UNTITLED = "Untitled Text";
+  const CREATED_TODAY = "Created today";
+  const CREATED_ON = "Created on ";
+  const UPDATED_TODAY = "Updated Today";
+  const UPDATED_ON = "Updated on ";
 
   const CATEGORIES = [
     {
@@ -38,9 +45,20 @@
   ];
   let categoryId = 5;
 
-  let taskId = 1;
+  let taskId = 2;
 
-  const TASKS = [];
+  const TASKS = [
+    {
+      id: 1,
+      class: "task-element",
+      name: "Sample Task",
+      taskStatus: false,
+      createdAt: "Saturday, January 5",
+      categoryId: "1",
+      note: "Sample Note",
+      noteSavedAt: "Saturday, January 6",
+    },
+  ];
 
   let selectedCategory = CATEGORIES[0];
   let selectedTask = null;
@@ -50,8 +68,10 @@
   const CATEGORY_LIST = document.getElementsByClassName("category");
   const TASK_LIST = document.getElementsByClassName("task");
   const RIGHT_SIDE = document.getElementById("right-side");
+
   /**
    * main init function which calls the corresponding functions
+   * init gets called at the start of the scope
    */
   function init() {
     getCurrentDate(DISPLAY);
@@ -64,9 +84,10 @@
 
   /**
    * Checks the event from the user to call the necessary function
-   * in case of a user enters a text and adds a response key it submits a
+   * eg in case of a user enters a text and adds a response key it submits a
    * request of a entered text to add using event listener
-   *
+   * in some case user clicks on some event is valid
+   * Input event on addition of selected task note is added
    */
   function events() {
     NEW_CATEGORY.addEventListener("keypress", addCategory);
@@ -85,8 +106,58 @@
       "click",
       controlRightSide
     );
+
+    if (selectedTask != null) {
+      RIGHT_SIDE.getElementsByClassName("add-note")[0].addEventListener(
+        "input",
+        applyNoteToTask
+      );
+    }
   }
 
+  /**
+   * Applies the user entered note to the concerned selected task
+   * storage to make use of the note when re-rendering the selected task again
+   *
+   * @param {*} event
+   */
+  function applyNoteToTask(event) {
+    TASKS.forEach((task) => {
+      if (task.id == selectedTask.id) {
+        task.note = event.target.value;
+        task.noteSavedAt = getCurrentDate(OBJECT);
+      }
+    });
+    renderNoteStatus();
+  }
+
+  /**
+   * Renders the note status near the note input
+   * Consists of messages of when the note was applied for the task
+   * note contains text or paragraph input entered by the user
+   */
+  function renderNoteStatus() {
+    const NOTE_STATUS = document.getElementById("note-status");
+    if (NOTE_STATUS != "") {
+      NOTE_STATUS.innerText = "";
+    }
+    let noteSavedDate = selectedTask.noteSavedAt;
+    if (noteSavedDate != null) {
+      if (noteSavedDate == getCurrentDate(OBJECT)) {
+        NOTE_STATUS.innerText = UPDATED_TODAY;
+      } else {
+        NOTE_STATUS.innerText = UPDATED_ON + noteSavedDate;
+      }
+    }
+  }
+
+  /**
+   * Applies the webpage selected task request to the storage to make use
+   * of the task in console such as notes, steps and so on,
+   * it checks the selected task request is really available in the
+   * account storage and carries to call the render
+   * @param {*} event
+   */
   function applySelectedTask(event) {
     if (event == null) {
       renderSelectedTask();
@@ -105,23 +176,46 @@
     }
   }
 
+  /**
+   * Removes the selected task highlight design such that, the task
+   * highlight can be refreshed and be set for the other,
+   * This function helps to remove the old selected task's
+   * highlight to show which was newly selected
+   */
   function removeTaskHighlight() {
     const CURRENT_TASK =
       document.getElementsByClassName("user-selected-task")[0];
-    CURRENT_TASK.className = "task";
+    if (CURRENT_TASK != null) {
+      CURRENT_TASK.className = "task";
+    }
   }
 
+  /**
+   * Renders the selected Task in which the user selects
+   * This function gets applied when the user selection request
+   * is valid and rendering will occur to show which was selected
+   * After a succesfull highlighting of the selected task,
+   * the right side will be rendered
+   */
   function renderSelectedTask() {
-    for (let i = 0; i < TASK_LIST.length; i++) {
-      console.log(TASK_LIST[i].id);
-      if (TASK_LIST[i].id == selectedTask.id) {
-        TASK_LIST[i].className = "user-selected-task";
-        renderRightSide();
+    if (selectedTask != null) {
+      for (let i = 0; i < TASK_LIST.length; i++) {
+        if (TASK_LIST[i].id == selectedTask.id) {
+          TASK_LIST[i].className = "user-selected-task";
+          renderRightSide();
+        }
       }
     }
     events();
   }
 
+  /**
+   * Renders the right side to show in depth details of the task
+   * selected and other accessibilities, right side
+   * commonly used when a task gets selected from the task list
+   * to make use of right side to get control of the task console
+   * like note, steps and etc.
+   */
   function renderRightSide() {
     RIGHT_SIDE.className = "right-side";
     let rightSideHead =
@@ -129,14 +223,48 @@
         "selected-task"
       )[0].getElementsByTagName("p")[0];
     rightSideHead.innerText = selectedTask.name;
+    if (selectedTask.note != null) {
+      RIGHT_SIDE.getElementsByClassName("add-note")[0].value =
+        selectedTask.note;
+    } else {
+      RIGHT_SIDE.getElementsByClassName("add-note")[0].value = "";
+    }
+    renderNoteStatus();
+    renderTaskStatus();
     controlRightSide(OPEN);
   }
 
+  /**
+   * Task status is basically a task creation information
+   * to make the user know when the task is actually gets created
+   */
+  function renderTaskStatus() {
+    let taskStatus =
+      RIGHT_SIDE.getElementsByClassName("task-created-at")[0].childNodes[1];
+    if (selectedTask.createdAt == getCurrentDate(OBJECT)) {
+      taskStatus.innerText = CREATED_TODAY;
+    } else {
+      taskStatus.innerText = CREATED_ON + selectedTask.createdAt;
+    }
+  }
+
+  /**
+   * Controls the right side whether to close it or open it
+   * commonly used when a task gets selected from the task list
+   * to make use of right side to get control of the task console
+   * like note, steps and etc.
+   * Right side closes when the user changes the category or clicks the
+   * slide button on the ride side
+   * @param {*} adjust
+   */
   function controlRightSide(adjust) {
     const CENTER = document.getElementById("center-block");
     if (adjust == CLOSE || adjust.type == "click") {
-      //   CENTER.className = "center center-wide";
-      //   RIGHT_SIDE.className = "right-side-closed";
+      CENTER.className = "center center-right-wide";
+      RIGHT_SIDE.className = "right-side-closed";
+      removeTaskHighlight();
+      selectedTask = null;
+      applySelectedTask();
     } else if (adjust == OPEN) {
       CENTER.className = "center";
       RIGHT_SIDE.className = "right-side";
@@ -144,6 +272,13 @@
     events();
   }
 
+  /**
+   * Applies the selected category which user selected in the page
+   * This function confronts the selected category is actually available in the
+   * storage and makes it the new selected category and calls the necessary
+   * function to render
+   * @param {*} event
+   */
   function applySelectedCategory(event) {
     if (event == null) {
       renderTasks();
@@ -161,6 +296,11 @@
     }
   }
 
+  /**
+   * Removes the highlight for the category
+   * removing the category highlight happens when the new category
+   * has been selected by the user so the highlight has replaced by another one
+   */
   function removeCategoryHighlight() {
     const CURRENT_CATEGORY =
       document.getElementsByClassName("category-selected")[0];
@@ -168,6 +308,13 @@
     selectedTask = null;
   }
 
+  /**
+   * Renders the selected category,
+   * the Selected category is user selected and
+   * user created category also can be selected
+   * The main purpose of the selected category is to sort the task to their categories
+   * for the ease of use for the user
+   */
   function renderSelectedCategory() {
     for (let i = 0; i < CATEGORY_LIST.length; i++) {
       if (CATEGORY_LIST[i].id == selectedCategory.id) {
@@ -241,10 +388,10 @@
         icon: "list",
         text: NEW_CATEGORY.value,
       });
-      console.log(CATEGORIES);
       selectedCategory = CATEGORIES[categoryId - 1];
       renderCategory();
       NEW_CATEGORY.value = "";
+      controlRightSide(CLOSE);
       applySelectedCategory();
     }
   }
@@ -298,11 +445,12 @@
           taskStatus: false,
           createdAt: getCurrentDate(OBJECT),
           categoryId: selectedCategory.id,
+          note: null,
+          noteSavedAt: null,
         });
         renderTasks();
         taskId++;
         NEW_TASK.value = "";
-        applySelectedTask();
       }
     }
   }
@@ -352,6 +500,7 @@
       }
     });
     sortedTasks = TASKS.reverse();
+    applySelectedTask();
     events();
   }
 
