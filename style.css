@@ -640,4 +640,8 @@ html body {
     transform: rotate(230deg);
 }
 
+.container .bottom-container .center-right-wide .center-main .task-list-origin .origin-feature .add-task {
+    margin-left: 73%;
+}
+
 /* Dynamic ends here*/

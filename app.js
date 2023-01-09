@@ -15,6 +15,8 @@
   const CREATED_ON = "Created on ";
   const UPDATED_TODAY = "Updated Today";
   const UPDATED_ON = "Updated on ";
+  const TASK_COMPLETED_ICON = "fa-regular fa-circle-check";
+  const TASK_PENDING_ICON = "fa-regular fa-circle";
 
   const CATEGORIES = [
     {
@@ -435,7 +437,7 @@
    */
   function addTask(event) {
     if (event.key === "Enter" || event.type == "click") {
-      if (NEW_TASK.value === "") {
+      if (NEW_TASK.value.trim() === "") {
         NEW_TASK.value = "";
       } else {
         TASKS.push({
@@ -470,9 +472,7 @@
           className: "task",
           id: task.id,
         });
-        let icon = createHTMLElement("i", {
-          className: "fa-regular fa-circle",
-        });
+        let icon = getTaskStatusIcon(task);
         let taskInfoDiv = createHTMLElement("div", {
           className: "task-info",
         });
@@ -502,6 +502,18 @@
     sortedTasks = TASKS.reverse();
     applySelectedTask();
     events();
+  }
+
+  function getTaskStatusIcon(task) {
+    if (task.taskStatus) {
+      return createHTMLElement("i", {
+        className: TASK_COMPLETED_ICON,
+      });
+    } else {
+      return createHTMLElement("i", {
+        className: TASK_PENDING_ICON,
+      });
+    }
   }
 
   init(); //calling init method
