@@ -102,7 +102,10 @@
 
     for (let i = 0; i < TASK_LIST.length; i++) {
       TASK_LIST[i].addEventListener("click", applySelectedTask);
+      TASK_LIST[i].children[0].addEventListener("click", applyTaskStatus);
     }
+
+    console.log(RIGHT_SIDE);
 
     RIGHT_SIDE.getElementsByClassName("hide-right-side")[0].addEventListener(
       "click",
@@ -164,7 +167,7 @@
     if (event == null) {
       renderSelectedTask();
     } else {
-      if (selectedTask != null) {
+      if (selectedTask != null && event.target.id != selectedTask.id) {
         removeTaskHighlight();
       }
       for (let i = 0; i < TASKS.length; i++) {
@@ -185,8 +188,9 @@
    * highlight to show which was newly selected
    */
   function removeTaskHighlight() {
-    const CURRENT_TASK =
-      document.getElementsByClassName("user-selected-task")[0];
+    const CURRENT_TASK = document.getElementsByClassName(
+      "task user-selected-task"
+    )[0];
     if (CURRENT_TASK != null) {
       CURRENT_TASK.className = "task";
     }
@@ -203,7 +207,7 @@
     if (selectedTask != null) {
       for (let i = 0; i < TASK_LIST.length; i++) {
         if (TASK_LIST[i].id == selectedTask.id) {
-          TASK_LIST[i].className = "user-selected-task";
+          TASK_LIST[i].className = "task user-selected-task";
           renderRightSide();
         }
       }
@@ -219,12 +223,18 @@
    * like note, steps and etc.
    */
   function renderRightSide() {
-    RIGHT_SIDE.className = "right-side";
-    let rightSideHead =
-      RIGHT_SIDE.getElementsByClassName(
-        "selected-task"
-      )[0].getElementsByTagName("p")[0];
-    rightSideHead.innerText = selectedTask.name;
+    let rightTaskInfo = document.getElementById("selected-task");
+    rightTaskInfo.innerHTML = "";
+    let icon = getTaskStatusIcon(selectedTask);
+    let text = createHTMLElement("p", {
+      content: selectedTask.name,
+    });
+    let importantIcon = createHTMLElement("i", {
+      className: "fa-regular fa-star",
+    });
+    rightTaskInfo.appendChild(icon);
+    rightTaskInfo.appendChild(text);
+    rightTaskInfo.appendChild(importantIcon);
     if (selectedTask.note != null) {
       RIGHT_SIDE.getElementsByClassName("add-note")[0].value =
         selectedTask.note;
@@ -232,7 +242,7 @@
       RIGHT_SIDE.getElementsByClassName("add-note")[0].value = "";
     }
     renderNoteStatus();
-    renderTaskStatus();
+    renderTaskDate();
     controlRightSide(OPEN);
   }
 
@@ -240,7 +250,7 @@
    * Task status is basically a task creation information
    * to make the user know when the task is actually gets created
    */
-  function renderTaskStatus() {
+  function renderTaskDate() {
     let taskStatus =
       RIGHT_SIDE.getElementsByClassName("task-created-at")[0].childNodes[1];
     if (selectedTask.createdAt == getCurrentDate(OBJECT)) {
@@ -484,7 +494,7 @@
           className: "labels",
           content: "Tasks",
         });
-        let impIconDiv = createHTMLElement("p", {
+        let impIconDiv = createHTMLElement("div", {
           className: "important-icon",
         });
         let importantIcon = createHTMLElement("i", {
@@ -514,6 +524,29 @@
         className: TASK_PENDING_ICON,
       });
     }
+  }
+
+  /**
+   * applies the task status whether to mark the task completed, true
+   * or to mark it as pending, false.
+   * The mark is based upon the user action which is executed using
+   * Click event on the radio icon
+   * @param {*} event
+   */
+  function applyTaskStatus(event) {
+    iconStyle = event.target.className;
+    TASKS.forEach((task) => {
+      if (event.target.parentNode.id == task.id) {
+        if (iconStyle == TASK_COMPLETED_ICON) {
+          task.taskStatus = false;
+        } else if (iconStyle == TASK_PENDING_ICON) {
+          task.taskStatus = true;
+        } else {
+          console.log("Error in applying task status");
+        }
+      }
+      renderTasks();
+    });
   }
 
   init(); //calling init method
