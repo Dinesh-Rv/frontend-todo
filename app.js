@@ -56,7 +56,7 @@
       name: "Sample Task",
       taskStatus: false,
       createdAt: "Saturday, January 5",
-      categoryId: "1",
+      categoryId: ["1", "5"],
       note: "Sample Note",
       noteSavedAt: "Saturday, January 6",
     },
@@ -105,7 +105,11 @@
       TASK_LIST[i].children[0].addEventListener("click", applyTaskStatus);
     }
 
-    console.log(RIGHT_SIDE);
+    if (selectedTask != null) {
+      RIGHT_SIDE.getElementsByClassName(
+        "selected-task"
+      )[0].children[0].addEventListener("click", applySelectedTaskStatus);
+    }
 
     RIGHT_SIDE.getElementsByClassName("hide-right-side")[0].addEventListener(
       "click",
@@ -167,7 +171,11 @@
     if (event == null) {
       renderSelectedTask();
     } else {
-      if (selectedTask != null && event.target.id != selectedTask.id) {
+      if (
+        selectedTask != null &&
+        event.target.id != selectedTask.id &&
+        event.target.id != ""
+      ) {
         removeTaskHighlight();
       }
       for (let i = 0; i < TASKS.length; i++) {
@@ -223,12 +231,10 @@
    * like note, steps and etc.
    */
   function renderRightSide() {
-    let rightTaskInfo = document.getElementById("selected-task");
+    let rightTaskInfo = RIGHT_SIDE.getElementsByClassName("selected-task")[0];
     rightTaskInfo.innerHTML = "";
     let icon = getTaskStatusIcon(selectedTask);
-    let text = createHTMLElement("p", {
-      content: selectedTask.name,
-    });
+    let text = getCorrespondingText(selectedTask);
     let importantIcon = createHTMLElement("i", {
       className: "fa-regular fa-star",
     });
@@ -244,6 +250,29 @@
     renderNoteStatus();
     renderTaskDate();
     controlRightSide(OPEN);
+  }
+
+  /**
+   * mainly used for to difrentiate pending and completed tasks
+   * using different classname
+   * different classname according to task status will be designed
+   * accordingly using css
+   *
+   * @param {*} selectedTask
+   * @returns a text html element with a classname
+   */
+  function getCorrespondingText(selectedTask) {
+    if (selectedTask.taskStatus) {
+      return createHTMLElement("p", {
+        className: "completed-task-name",
+        content: selectedTask.name,
+      });
+    } else {
+      return createHTMLElement("p", {
+        className: "task-name",
+        content: selectedTask.name,
+      });
+    }
   }
 
   /**
@@ -455,8 +484,9 @@
           class: "task-element",
           name: NEW_TASK.value,
           taskStatus: false,
+          taskCompletedAt: null,
           createdAt: getCurrentDate(OBJECT),
-          categoryId: selectedCategory.id,
+          categoryId: [selectedCategory.id],
           note: null,
           noteSavedAt: null,
         });
@@ -477,42 +507,45 @@
     let selectedCategoryId = selectedCategory.id;
     let sortedTasks = TASKS.reverse();
     sortedTasks.forEach((task) => {
-      if (selectedCategoryId == task.categoryId) {
-        let listItem = createHTMLElement("li", {
-          className: "task",
-          id: task.id,
-        });
-        let icon = getTaskStatusIcon(task);
-        let taskInfoDiv = createHTMLElement("div", {
-          className: "task-info",
-        });
-        let text = createHTMLElement("p", {
-          className: "task-name",
-          content: task.name,
-        });
-        let footer = createHTMLElement("p", {
-          className: "labels",
-          content: "Tasks",
-        });
-        let impIconDiv = createHTMLElement("div", {
-          className: "important-icon",
-        });
-        let importantIcon = createHTMLElement("i", {
-          className: "fa-regular fa-star",
-        });
-        taskList.appendChild(listItem);
-        listItem.appendChild(icon);
-        listItem.appendChild(taskInfoDiv);
-        taskInfoDiv.appendChild(text);
-        taskInfoDiv.appendChild(footer);
-        listItem.appendChild(impIconDiv);
-        impIconDiv.appendChild(importantIcon);
-      }
+      let taskCategoryIds = task.categoryId;
+      taskCategoryIds.forEach((categoryId) => {
+        if (selectedCategoryId == categoryId) {
+          let listItem = createHTMLElement("li", {
+            className: "task",
+            id: task.id,
+          });
+          let icon = getTaskStatusIcon(task);
+          let taskInfoDiv = createHTMLElement("div", {
+            className: "task-info",
+          });
+          let text = getCorrespondingText(task);
+          let footer = createHTMLElement("p", {
+            className: "labels",
+            content: "Tasks",
+          });
+          let impIconDiv = createHTMLElement("div", {
+            className: "important-icon",
+          });
+          let importantIcon = createHTMLElement("i", {
+            className: "fa-regular fa-star",
+          });
+          taskList.appendChild(listItem);
+          listItem.appendChild(icon);
+          listItem.appendChild(taskInfoDiv);
+          taskInfoDiv.appendChild(text);
+          taskInfoDiv.appendChild(footer);
+          listItem.appendChild(impIconDiv);
+          impIconDiv.appendChild(importantIcon);
+        }
+      });
     });
     sortedTasks = TASKS.reverse();
+    renderCompletedTasks();
     applySelectedTask();
     events();
   }
+
+  function renderCompletedTasks() {}
 
   function getTaskStatusIcon(task) {
     if (task.taskStatus) {
@@ -526,6 +559,8 @@
     }
   }
 
+  function renderForCompletedTasks() {}
+
   /**
    * applies the task status whether to mark the task completed, true
    * or to mark it as pending, false.
@@ -537,16 +572,31 @@
     iconStyle = event.target.className;
     TASKS.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
-        if (iconStyle == TASK_COMPLETED_ICON) {
-          task.taskStatus = false;
-        } else if (iconStyle == TASK_PENDING_ICON) {
-          task.taskStatus = true;
-        } else {
-          console.log("Error in applying task status");
-        }
+        assignTaskStatus(task, iconStyle);
       }
-      renderTasks();
     });
+    renderTasks();
+  }
+
+  function applySelectedTaskStatus(event) {
+    iconStyle = event.target.className;
+    if (selectedTask != null) {
+      if (event.target.parentNode.id == "selected-task") {
+        assignTaskStatus(selectedTask, iconStyle);
+      }
+    }
+    renderTasks();
+  }
+
+  function assignTaskStatus(task, iconStyle) {
+    if (iconStyle == TASK_COMPLETED_ICON) {
+      task.taskStatus = false;
+      task.taskCompletedAt = null;
+    } else if (iconStyle == TASK_PENDING_ICON) {
+      task.taskStatus = true;
+    } else {
+      console.log("Error in applying task status");
+    }
   }
 
   init(); //calling init method

@@ -395,7 +395,8 @@ html body {
     margin-bottom: 5px;
 }
 
-.container .bottom-container .center .center-main .task-list-container .task-list li .task-info .task-name {
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info .task-name,
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info .completed-task-name {
     margin: 5px 0px 0px 0px;
     font-size: 15px;
     color: black;
@@ -652,10 +653,18 @@ html body {
     transform: rotate(230deg);
 }
 
-
-
 .container .bottom-container .center-right-wide .center-main .task-list-origin .origin-feature .add-task {
     margin-left: 73%;
+}
+
+.container .bottom-container .right-side .right-side-top .right-side-main .selected-task .completed-task-name {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info .completed-task-name {
+    text-decoration: line-through;
+    opacity: 0.6;
 }
 
 /* Dynamic ends here*/
