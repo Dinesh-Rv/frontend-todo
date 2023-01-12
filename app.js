@@ -17,6 +17,9 @@
   const UPDATED_ON = "Updated on ";
   const TASK_COMPLETED_ICON = "fa-regular fa-circle-check";
   const TASK_PENDING_ICON = "fa-regular fa-circle";
+  const NOT_IMPORTANT_ICON = "fa-regular fa-star";
+  const IMPORTANT_ICON = "fa-solid fa-star";
+  const LAST_STATIC_CATEGORY_ID = 5;
 
   const CATEGORIES = [
     {
@@ -103,6 +106,7 @@
     for (let i = 0; i < TASK_LIST.length; i++) {
       TASK_LIST[i].addEventListener("click", applySelectedTask);
       TASK_LIST[i].children[0].addEventListener("click", applyTaskStatus);
+      TASK_LIST[i].children[2].addEventListener("click", applyImportantTask);
     }
 
     if (selectedTask != null) {
@@ -461,7 +465,7 @@
       CATEGORY_LIST.appendChild(listItem);
       listItem.appendChild(icon);
       listItem.appendChild(text);
-      if (category.id == 5) {
+      if (category.id == LAST_STATIC_CATEGORY_ID) {
         let hr = createHTMLElement("hr", { className: "split-category" });
         CATEGORY_LIST.appendChild(hr);
       }
@@ -479,6 +483,7 @@
       if (NEW_TASK.value.trim() === "") {
         NEW_TASK.value = "";
       } else {
+        let allocatedCategory = getAllocatedCategory();
         TASKS.push({
           id: taskId,
           class: "task-element",
@@ -486,7 +491,7 @@
           taskStatus: false,
           taskCompletedAt: null,
           createdAt: getCurrentDate(OBJECT),
-          categoryId: [selectedCategory.id],
+          categoryId: allocatedCategory,
           note: null,
           noteSavedAt: null,
         });
@@ -495,6 +500,17 @@
         NEW_TASK.value = "";
       }
     }
+  }
+
+  function getAllocatedCategory() {
+    let allocatedCategory = [];
+    if (selectedCategory != null) {
+      allocatedCategory.push(selectedCategory.id);
+    }
+    if (selectedCategory.id < LAST_STATIC_CATEGORY_ID) {
+      allocatedCategory.push(5);
+    }
+    return allocatedCategory;
   }
 
   /**
@@ -508,8 +524,8 @@
     let sortedTasks = TASKS.reverse();
     sortedTasks.forEach((task) => {
       let taskCategoryIds = task.categoryId;
-      taskCategoryIds.forEach((categoryId) => {
-        if (selectedCategoryId == categoryId) {
+      taskCategoryIds.forEach((category) => {
+        if (selectedCategoryId == category && category != null) {
           let listItem = createHTMLElement("li", {
             className: "task",
             id: task.id,
@@ -523,29 +539,21 @@
             className: "labels",
             content: "Tasks",
           });
-          let impIconDiv = createHTMLElement("div", {
-            className: "important-icon",
-          });
-          let importantIcon = createHTMLElement("i", {
-            className: "fa-regular fa-star",
-          });
+          let importantIcon = getTaskImportantIcon(task);
+
           taskList.appendChild(listItem);
           listItem.appendChild(icon);
           listItem.appendChild(taskInfoDiv);
           taskInfoDiv.appendChild(text);
           taskInfoDiv.appendChild(footer);
-          listItem.appendChild(impIconDiv);
-          impIconDiv.appendChild(importantIcon);
+          listItem.appendChild(importantIcon);
         }
       });
     });
     sortedTasks = TASKS.reverse();
-    renderCompletedTasks();
     applySelectedTask();
     events();
   }
-
-  function renderCompletedTasks() {}
 
   function getTaskStatusIcon(task) {
     if (task.taskStatus) {
@@ -559,7 +567,18 @@
     }
   }
 
-  function renderForCompletedTasks() {}
+  function getTaskImportantIcon(task) {
+    let taskCategoryIds = task.categoryId;
+    let iconType = NOT_IMPORTANT_ICON;
+    taskCategoryIds.forEach((category) => {
+      if (category == "2") {
+        iconType = IMPORTANT_ICON;
+      }
+    });
+    return createHTMLElement("i", {
+      className: iconType,
+    });
+  }
 
   /**
    * applies the task status whether to mark the task completed, true
@@ -597,6 +616,22 @@
     } else {
       console.log("Error in applying task status");
     }
+  }
+
+  function applyImportantTask(event) {
+    iconStyle = event.target.className;
+    TASKS.forEach((task) => {
+      console.log(event.target.parentNode);
+      if (event.target.parentNode.id == task.id) {
+        if (iconStyle == IMPORTANT_ICON) {
+          let categoryIndex = task.categoryId.indexOf(2);
+          task.categoryId.splice(categoryIndex, 1);
+        } else if (iconStyle == NOT_IMPORTANT_ICON) {
+          task.categoryId.push("2");
+        }
+      }
+    });
+    renderTasks();
   }
 
   init(); //calling init method

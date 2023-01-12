@@ -381,8 +381,7 @@ html body {
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list li i,
-.container .bottom-container .center .center-main .task-list-container .task-list li .task-info,
-.container .bottom-container .center .center-main .task-list-container .task-list li .important-icon {
+.container .bottom-container .center .center-main .task-list-container .task-list li .task-info {
     display: inline-block;
 }
 
@@ -390,7 +389,7 @@ html body {
     font-size: 13px;
     color: gray;
     height: 50px;
-    width: 78%;
+    width: 69%;
     vertical-align: middle;
     margin-bottom: 5px;
 }
@@ -629,12 +628,8 @@ html body {
     box-shadow: 0px 7px 4px grey;
 }
 
-.container .bottom-container .center-right-wide .center-main .task-list-origin .unchecked-circle {
-    margin-left: 5.5%;
-}
-
-.container .bottom-container .center-right-wide .center-main .task-list-container .task-list li i {
-    margin-left: 5.5%;
+.container .bottom-container .center-right-wide .center-main .task-list-container .task-list li .task-info {
+    width: 72%;
 }
 
 .container .bottom-container .center .center-main .task-list-container .task-list .user-selected-task {
