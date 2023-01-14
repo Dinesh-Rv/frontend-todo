@@ -470,6 +470,7 @@ html body {
     width: 200px;
     font-size: 16px;
     font-weight: bold;
+    pointer-events: none;
 }
 
 .container .bottom-container .right-side .right-side-top .right-side-main .task-console .task-steps p {
@@ -485,6 +486,7 @@ html body {
 
 .container .bottom-container .right-side .right-side-top .right-side-main .selected-task {
     background-color: #ffffff;
+    color: #2564cf;
 }
 
 .container .bottom-container .right-side .right-side-top .right-side-main .selected-task:hover {
