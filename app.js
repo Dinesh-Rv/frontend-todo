@@ -3,7 +3,11 @@
  * for certain variables and functions for the webpage
  * Contains all the support for the todo webpage
  * for organising the data such as
- * tasks, categories and so on
+ * tasks, categories and tools to handle the to do list
+ * by the user
+ *
+ * @author Dinesh Ravikumar
+ * @since 28/12/2022
  */
 (function () {
   const DISPLAY = "display";
@@ -59,7 +63,7 @@
       name: "Sample Task",
       taskStatus: false,
       createdAt: "Saturday, January 5",
-      categoryId: ["1", "5"],
+      categoryIds: ["1", "5"],
       note: "Sample Note",
       noteSavedAt: "Saturday, January 6",
     },
@@ -77,6 +81,8 @@
   /**
    * main init function which calls the corresponding functions
    * init gets called at the start of the scope
+   * works as a main unit for to-do manipulation process
+   * calls functions sequentially to use required function for the right time
    */
   function init() {
     getCurrentDate(DISPLAY);
@@ -113,6 +119,9 @@
       RIGHT_SIDE.getElementsByClassName(
         "selected-task"
       )[0].children[0].addEventListener("click", applySelectedTaskStatus);
+      RIGHT_SIDE.getElementsByClassName(
+        "selected-task"
+      )[0].children[2].addEventListener("click", applySelectedTaskImportant);
     }
 
     RIGHT_SIDE.getElementsByClassName("hide-right-side")[0].addEventListener(
@@ -131,8 +140,12 @@
   /**
    * Applies the user entered note to the concerned selected task
    * storage to make use of the note when re-rendering the selected task again
+   * text entry from the user will be received by the event listener
+   * and will be applied on real time to the selected task
    *
-   * @param {*} event
+   * @param {*} event - applies the event from the user, text entry will
+   *                    automatically generates a event
+   *
    */
   function applyNoteToTask(event) {
     TASKS.forEach((task) => {
@@ -169,7 +182,8 @@
    * of the task in console such as notes, steps and so on,
    * it checks the selected task request is really available in the
    * account storage and carries to call the render
-   * @param {*} event
+   * @param {*} event - event from the user, click event in a list of
+   *                    task will present as a new event using event listeners
    */
   function applySelectedTask(event) {
     if (event == null) {
@@ -239,9 +253,7 @@
     rightTaskInfo.innerHTML = "";
     let icon = getTaskStatusIcon(selectedTask);
     let text = getCorrespondingText(selectedTask);
-    let importantIcon = createHTMLElement("i", {
-      className: "fa-regular fa-star",
-    });
+    let importantIcon = getTaskImportantIcon(selectedTask);
     rightTaskInfo.appendChild(icon);
     rightTaskInfo.appendChild(text);
     rightTaskInfo.appendChild(importantIcon);
@@ -282,6 +294,7 @@
   /**
    * Task status is basically a task creation information
    * to make the user know when the task is actually gets created
+   * i.e a display about the task creation date
    */
   function renderTaskDate() {
     let taskStatus =
@@ -300,7 +313,9 @@
    * like note, steps and etc.
    * Right side closes when the user changes the category or clicks the
    * slide button on the ride side
-   * @param {*} adjust
+   * @param {*} adjust - For adjusting the right side render, it lets selected task corner
+   *                     render out or removes the render when there is no use case for
+   *                     the selected task render(Right side).
    */
   function controlRightSide(adjust) {
     const CENTER = document.getElementById("center-block");
@@ -322,7 +337,8 @@
    * This function confronts the selected category is actually available in the
    * storage and makes it the new selected category and calls the necessary
    * function to render
-   * @param {*} event
+   * @param {*} event - Contains a event to apply a selected category
+   *                    event based upon the user selection of the list of categories
    */
   function applySelectedCategory(event) {
     if (event == null) {
@@ -379,8 +395,9 @@
    * Checkes the element based upon their requirement,
    * to get rid of getting a error while
    * the elements has no use of classname or innertext
-   * @param {*} element
-   * @returns created element
+   * @param {*} tagName - contains a tagname for the upcomming html element
+   * @param {*} element - elements that an html tag can have eg. class name, id and etc.
+   * @returns final created html element to make use of in html document insertion
    */
   function createHTMLElement(tagName, element) {
     let createdElement = document.createElement(tagName);
@@ -402,6 +419,10 @@
    * Date is formatted to that the
    * month and weekday as long text
    * and day as in number
+   * @param {*} type - contains what type of date is needed,
+   *                   one can display the date information in the top page of category header
+   *                   another will returns object for corresponding function in use
+   * @returns a formatted date object
    */
   function getCurrentDate(type) {
     const date = new Date().toLocaleDateString("en-us", {
@@ -421,7 +442,8 @@
    * In which groups can be mentioned as the to-do-list holder
    * they contain list of to-do-list
    * groups adds up when the user enters the text and pressed the enter key
-   * @param {*} event
+   * @param {*} event - contains a enter event for category when user
+   *                    wants to create a category
    */
   function addCategory(event) {
     if (event.key === "Enter") {
@@ -444,7 +466,9 @@
   /**
    * Renders the categories in the left to sort out the to-do based
    * upon the category
-   *
+   * Category is a list which can contain both predefined category(From the backend)
+   * and user defined category(from the end user interacting the webpage)
+   * category can contain tasks
    */
   function renderCategory() {
     let CATEGORY_LIST = document.getElementById("sidebar-category");
@@ -477,6 +501,8 @@
    * In which tasks are the entries that user enters
    * Tasks can be divided upon categories for ease of use
    * Tasks has status to mention if the task is finished or not
+   * @param {*} event - has a enter and click event from the user
+   *                    to add a task using event listeners
    */
   function addTask(event) {
     if (event.key === "Enter" || event.type == "click") {
@@ -491,7 +517,7 @@
           taskStatus: false,
           taskCompletedAt: null,
           createdAt: getCurrentDate(OBJECT),
-          categoryId: allocatedCategory,
+          categoryIds: allocatedCategory,
           note: null,
           noteSavedAt: null,
         });
@@ -502,6 +528,13 @@
     }
   }
 
+  /**
+   * gives the category list to allocated for an task,
+   * category is based upon the selected category and
+   * where the task is actually originated.
+   * custom category cannot be applied to task category
+   * @returns list of category that a task can be allocated to.
+   */
   function getAllocatedCategory() {
     let allocatedCategory = [];
     if (selectedCategory != null) {
@@ -516,6 +549,10 @@
   /**
    * Renders tasks in the task container for the webpage
    * task contains user entered task which contains several manipulation features
+   * task can be rendered by the allocated category.
+   * Each task icons will be rendered based upon the status
+   * if a task is completed the icon will be automatically rendered as completed
+   * same for importance of the task
    */
   function renderTasks() {
     let taskList = document.getElementById("task-list");
@@ -523,7 +560,7 @@
     let selectedCategoryId = selectedCategory.id;
     let sortedTasks = TASKS.reverse();
     sortedTasks.forEach((task) => {
-      let taskCategoryIds = task.categoryId;
+      let taskCategoryIds = task.categoryIds;
       taskCategoryIds.forEach((category) => {
         if (selectedCategoryId == category && category != null) {
           let listItem = createHTMLElement("li", {
@@ -555,6 +592,13 @@
     events();
   }
 
+  /**
+   * confirms the icon based upon the status of the task
+   * i.e basis upon the completion of the task
+   * This function creates an html element for the task status icon
+   * @param {*} task - contains a task object get a task status icon
+   * @returns an html element of a icon based upon the task status
+   */
   function getTaskStatusIcon(task) {
     if (task.taskStatus) {
       return createHTMLElement("i", {
@@ -567,8 +611,17 @@
     }
   }
 
+  /**
+   * confirms the icon based upon the importance status of the task
+   * i.e basis upon the important category selection
+   * or in which a task is selected important by the user
+   * This function creates an html element for icon
+   * based upon the importancy status
+   * @param {*} task - contains a task object get a task importance icon
+   * @returns an html element of a icon based upon the task importance
+   */
   function getTaskImportantIcon(task) {
-    let taskCategoryIds = task.categoryId;
+    let taskCategoryIds = task.categoryIds;
     let iconType = NOT_IMPORTANT_ICON;
     taskCategoryIds.forEach((category) => {
       if (category == "2") {
@@ -585,7 +638,8 @@
    * or to mark it as pending, false.
    * The mark is based upon the user action which is executed using
    * Click event on the radio icon
-   * @param {*} event
+   * @param {*} event - the event from the user, click which
+   *                    was generated by the event listener
    */
   function applyTaskStatus(event) {
     iconStyle = event.target.className;
@@ -597,6 +651,17 @@
     renderTasks();
   }
 
+  /**
+   * applies the selected task status whether to mark the task completed, true
+   * or to mark it as pending, false.
+   * The mark is based upon status of the right side,
+   * the user action which is executed using
+   * Click event on the radio icon.
+   * This function doesnt gets any event when there is no task was selected,
+   * selected a task generates a right side
+   * @param {*} event - the event from the user, click which
+   *                    was generated by the event listener
+   */
   function applySelectedTaskStatus(event) {
     iconStyle = event.target.className;
     if (selectedTask != null) {
@@ -607,6 +672,12 @@
     renderTasks();
   }
 
+  /**
+   * assigns a task status in basis of rollbacking a event of what user applies a event,
+   * i.e rollbacking a completed task to not completed when the user click it
+   * @param {*} task - contains a task to update its status of completed or pending
+   * @param {*} iconStyle - to check the type of icon style user clicks on
+   */
   function assignTaskStatus(task, iconStyle) {
     if (iconStyle == TASK_COMPLETED_ICON) {
       task.taskStatus = false;
@@ -618,20 +689,58 @@
     }
   }
 
+  /**
+   * applies the task importance whether to mark the task important based upon the
+   * category it holds
+   * The mark is based upon the user action which is executed using
+   * Click event on the star icon
+   * @param {*} event - the event from the user, click which
+   *                    was generated by the event listener
+   */
   function applyImportantTask(event) {
     iconStyle = event.target.className;
     TASKS.forEach((task) => {
-      console.log(event.target.parentNode);
       if (event.target.parentNode.id == task.id) {
-        if (iconStyle == IMPORTANT_ICON) {
-          let categoryIndex = task.categoryId.indexOf(2);
-          task.categoryId.splice(categoryIndex, 1);
-        } else if (iconStyle == NOT_IMPORTANT_ICON) {
-          task.categoryId.push("2");
-        }
+        assignImportantTask(task, iconStyle);
       }
     });
     renderTasks();
+  }
+
+  /**
+   * applies the selected task importance whether to mark the task as important,
+   * based upon the holded category ids
+   * The mark is based upon status of the right side,
+   * the user action which is executed using
+   * Click event on the star icon.
+   * This function doesnt gets any event when there is no task was selected,
+   * selected a task generates a right side
+   * @param {*} event - the event from the user, click which
+   *                    was generated by the event listener
+   */
+  function applySelectedTaskImportant(event) {
+    iconStyle = event.target.className;
+    if (selectedTask != null) {
+      if (event.target.parentNode.id == "selected-task") {
+        assignImportantTask(selectedTask, iconStyle);
+      }
+    }
+    renderTasks();
+  }
+
+  /**
+   * assigns a task importance in basis of rollbacking a event of what user applies a event,
+   * i.e rollbacking a important task to normal task when a user clicks it
+   * @param {*} task - contains a task to update its status of completed or pending
+   * @param {*} iconStyle - to check the type of icon style user clicks on
+   */
+  function assignImportantTask(task, iconStyle) {
+    if (iconStyle == IMPORTANT_ICON) {
+      let categoryIndex = task.categoryIds.indexOf(2);
+      task.categoryIds.splice(categoryIndex, 1);
+    } else if (iconStyle == NOT_IMPORTANT_ICON) {
+      task.categoryIds.push("2");
+    }
   }
 
   init(); //calling init method
