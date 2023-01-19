@@ -1,3 +1,5 @@
+import { apiConnection } from "./ApiConnection.js";
+
 /**
  * Self invoking function which acts as a class
  * for certain variables and functions for the webpage
@@ -24,52 +26,14 @@
   const NOT_IMPORTANT_ICON = "fa-regular fa-star";
   const IMPORTANT_ICON = "fa-solid fa-star";
   const LAST_STATIC_CATEGORY_ID = 5;
+  const POST = "POST";
+  const GET = "GET";
 
-  const CATEGORIES = [
-    {
-      id: 1,
-      icon: "light_mode",
-      text: "My Day",
-    },
-    {
-      id: 2,
-      icon: "star",
-      text: "Important",
-    },
-    {
-      id: 3,
-      icon: "calendar_month",
-      text: "Planned",
-    },
-    {
-      id: 4,
-      icon: "person",
-      text: "Assigned to me",
-    },
-    {
-      id: 5,
-      icon: "home",
-      text: "Tasks",
-    },
-  ];
-  let categoryId = 5;
+  let categoryList = [];
 
-  let taskId = 2;
+  let taskList = [];
 
-  const TASKS = [
-    {
-      id: 1,
-      class: "task-element",
-      name: "Sample Task",
-      taskStatus: false,
-      createdAt: "Saturday, January 5",
-      categoryIds: ["1", "5"],
-      note: "Sample Note",
-      noteSavedAt: "Saturday, January 6",
-    },
-  ];
-
-  let selectedCategory = CATEGORIES[0];
+  let selectedCategory = null;
   let selectedTask = null;
   const NEW_CATEGORY = document.getElementById("new-category");
   const NEW_TASK = document.getElementById("task-input");
@@ -85,9 +49,9 @@
    * calls functions sequentially to use required function for the right time
    */
   function init() {
+    getCategories();
+    getTasks();
     getCurrentDate(DISPLAY);
-    renderCategory();
-    renderTasks();
     renderSelectedCategory();
     controlRightSide(CLOSE);
     events();
@@ -148,13 +112,14 @@
    *
    */
   function applyNoteToTask(event) {
-    TASKS.forEach((task) => {
+    taskList.forEach((task) => {
       if (task.id == selectedTask.id) {
         task.note = event.target.value;
         task.noteSavedAt = getCurrentDate(OBJECT);
+        apiConnection(POST, "task", selectedTask);
+        renderNoteStatus();
       }
     });
-    renderNoteStatus();
   }
 
   /**
@@ -196,10 +161,10 @@
       ) {
         removeTaskHighlight();
       }
-      for (let i = 0; i < TASKS.length; i++) {
-        if (TASKS[i].id == event.target.id) {
-          if (selectedTask != TASKS[i]) {
-            selectedTask = TASKS[i];
+      for (let i = 0; i < taskList.length; i++) {
+        if (taskList[i].id == event.target.id) {
+          if (selectedTask != taskList[i]) {
+            selectedTask = taskList[i];
             renderSelectedTask();
           }
         }
@@ -278,7 +243,7 @@
    * @returns a text html element with a classname
    */
   function getCorrespondingText(selectedTask) {
-    if (selectedTask.taskStatus) {
+    if (selectedTask.isCompleted) {
       return createHTMLElement("p", {
         className: "completed-task-name",
         content: selectedTask.name,
@@ -297,12 +262,12 @@
    * i.e a display about the task creation date
    */
   function renderTaskDate() {
-    let taskStatus =
+    let taskDateInfo =
       RIGHT_SIDE.getElementsByClassName("task-created-at")[0].childNodes[1];
     if (selectedTask.createdAt == getCurrentDate(OBJECT)) {
-      taskStatus.innerText = CREATED_TODAY;
+      taskDateInfo.innerText = CREATED_TODAY;
     } else {
-      taskStatus.innerText = CREATED_ON + selectedTask.createdAt;
+      taskDateInfo.innerText = CREATED_ON + selectedTask.createdAt;
     }
   }
 
@@ -345,12 +310,12 @@
       renderTasks();
       renderSelectedCategory();
     } else {
-      for (let i = 0; i < CATEGORIES.length; i++) {
-        if (CATEGORIES[i].id == event.target.id) {
-          selectedCategory = CATEGORIES[i];
+      for (let i = 0; i < categoryList.length; i++) {
+        if (categoryList[i].id == event.target.id) {
+          selectedCategory = categoryList[i];
           removeCategoryHighlight();
-          renderTasks();
           renderSelectedCategory();
+          getTasks();
           controlRightSide(CLOSE);
         }
       }
@@ -382,9 +347,9 @@
         CATEGORY_LIST[i].className = "category-selected";
         let centerHead = document.getElementsByClassName("center-head")[0];
         centerHead.childNodes[1].childNodes[1].innerText =
-          selectedCategory.icon;
+          selectedCategory.iconName;
         centerHead.childNodes[3].childNodes[1].innerText =
-          selectedCategory.text;
+          selectedCategory.name;
       }
     }
     events();
@@ -450,17 +415,28 @@
       if (NEW_CATEGORY.value === "") {
         NEW_CATEGORY.value = UNTITLED;
       }
-      CATEGORIES.push({
-        id: ++categoryId,
-        icon: "list",
-        text: NEW_CATEGORY.value,
+      let userCategory = {
+        iconName: "list",
+        name: NEW_CATEGORY.value,
+      };
+      const RESPONSE = apiConnection(POST, "category", userCategory);
+      getCategories();
+      RESPONSE.then((newCategoryId) => {
+        NEW_CATEGORY.value = "";
+        selectedCategory = categoryList[newCategoryId - 1];
+        getCategories();
+        controlRightSide(CLOSE);
+        applySelectedCategory();
       });
-      selectedCategory = CATEGORIES[categoryId - 1];
-      renderCategory();
-      NEW_CATEGORY.value = "";
-      controlRightSide(CLOSE);
-      applySelectedCategory();
     }
+  }
+
+  function getCategories() {
+    const CATEGORIES = apiConnection(GET, "categories");
+    CATEGORIES.then((categories) => {
+      categoryList = categories;
+      renderCategory(categoryList);
+    });
   }
 
   /**
@@ -470,20 +446,20 @@
    * and user defined category(from the end user interacting the webpage)
    * category can contain tasks
    */
-  function renderCategory() {
+  function renderCategory(categoryList) {
     let CATEGORY_LIST = document.getElementById("sidebar-category");
     CATEGORY_LIST.innerHTML = "";
-    CATEGORIES.forEach((category) => {
+    categoryList.forEach((category) => {
       let listItem = createHTMLElement("li", {
         className: "category",
         id: category.id,
       });
       let icon = createHTMLElement("i", {
         className: "material-icons",
-        content: category.icon,
+        content: category.iconName,
       });
       let text = createHTMLElement("p", {
-        content: category.text,
+        content: category.name,
         className: "category-text",
       });
       CATEGORY_LIST.appendChild(listItem);
@@ -494,6 +470,10 @@
         CATEGORY_LIST.appendChild(hr);
       }
     });
+    if (selectedCategory == null) {
+      selectedCategory = categoryList[0];
+      renderSelectedCategory();
+    }
   }
 
   /**
@@ -510,19 +490,16 @@
         NEW_TASK.value = "";
       } else {
         let allocatedCategory = getAllocatedCategory();
-        TASKS.push({
-          id: taskId,
-          class: "task-element",
+        let userTask = {
           name: NEW_TASK.value,
-          taskStatus: false,
-          taskCompletedAt: null,
+          isCompleted: false,
           createdAt: getCurrentDate(OBJECT),
           categoryIds: allocatedCategory,
           note: null,
           noteSavedAt: null,
-        });
-        renderTasks();
-        taskId++;
+        };
+        apiConnection(POST, "task", userTask);
+        getTasks();
         NEW_TASK.value = "";
       }
     }
@@ -546,6 +523,14 @@
     return allocatedCategory;
   }
 
+  function getTasks() {
+    const TASKS = apiConnection(GET, "tasks");
+    TASKS.then((tasks) => {
+      taskList = tasks;
+      renderTasks(taskList);
+    });
+  }
+
   /**
    * Renders tasks in the task container for the webpage
    * task contains user entered task which contains several manipulation features
@@ -554,11 +539,11 @@
    * if a task is completed the icon will be automatically rendered as completed
    * same for importance of the task
    */
-  function renderTasks() {
+  function renderTasks(tasks) {
     let taskList = document.getElementById("task-list");
     taskList.innerHTML = "";
     let selectedCategoryId = selectedCategory.id;
-    let sortedTasks = TASKS.reverse();
+    let sortedTasks = tasks.reverse();
     sortedTasks.forEach((task) => {
       let taskCategoryIds = task.categoryIds;
       taskCategoryIds.forEach((category) => {
@@ -587,7 +572,7 @@
         }
       });
     });
-    sortedTasks = TASKS.reverse();
+    sortedTasks = tasks.reverse();
     applySelectedTask();
     events();
   }
@@ -600,7 +585,7 @@
    * @returns an html element of a icon based upon the task status
    */
   function getTaskStatusIcon(task) {
-    if (task.taskStatus) {
+    if (task.isCompleted) {
       return createHTMLElement("i", {
         className: TASK_COMPLETED_ICON,
       });
@@ -642,13 +627,14 @@
    *                    was generated by the event listener
    */
   function applyTaskStatus(event) {
-    iconStyle = event.target.className;
-    TASKS.forEach((task) => {
+    let iconStyle = event.target.className;
+    taskList.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
         assignTaskStatus(task, iconStyle);
+        apiConnection(POST, "task", task);
       }
     });
-    renderTasks();
+    getTasks();
   }
 
   /**
@@ -663,13 +649,14 @@
    *                    was generated by the event listener
    */
   function applySelectedTaskStatus(event) {
-    iconStyle = event.target.className;
+    let iconStyle = event.target.className;
     if (selectedTask != null) {
       if (event.target.parentNode.id == "selected-task") {
         assignTaskStatus(selectedTask, iconStyle);
+        apiConnection(POST, "task", selectedTask);
+        getTasks();
       }
     }
-    renderTasks();
   }
 
   /**
@@ -680,10 +667,10 @@
    */
   function assignTaskStatus(task, iconStyle) {
     if (iconStyle == TASK_COMPLETED_ICON) {
-      task.taskStatus = false;
+      task.isCompleted = false;
       task.taskCompletedAt = null;
     } else if (iconStyle == TASK_PENDING_ICON) {
-      task.taskStatus = true;
+      task.isCompleted = true;
     } else {
       console.log("Error in applying task status");
     }
@@ -698,13 +685,14 @@
    *                    was generated by the event listener
    */
   function applyImportantTask(event) {
-    iconStyle = event.target.className;
-    TASKS.forEach((task) => {
+    let iconStyle = event.target.className;
+    taskList.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
         assignImportantTask(task, iconStyle);
+        apiConnection(POST, "task", task);
       }
     });
-    renderTasks();
+    getTasks();
   }
 
   /**
@@ -719,13 +707,14 @@
    *                    was generated by the event listener
    */
   function applySelectedTaskImportant(event) {
-    iconStyle = event.target.className;
+    let iconStyle = event.target.className;
     if (selectedTask != null) {
       if (event.target.parentNode.id == "selected-task") {
         assignImportantTask(selectedTask, iconStyle);
+        apiConnection(POST, "task", selectedTask);
+        getTasks();
       }
     }
-    renderTasks();
   }
 
   /**
