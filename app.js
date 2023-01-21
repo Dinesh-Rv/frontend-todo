@@ -26,6 +26,7 @@ import { apiConnection } from "./ApiConnection.js";
   const NOT_IMPORTANT_ICON = "fa-regular fa-star";
   const IMPORTANT_ICON = "fa-solid fa-star";
   const LAST_STATIC_CATEGORY_ID = 5;
+  const NEW_CATEGORY_ADDED = true;
   const POST = "POST";
   const GET = "GET";
 
@@ -35,6 +36,7 @@ import { apiConnection } from "./ApiConnection.js";
 
   let selectedCategory = null;
   let selectedTask = null;
+  let isRightContainerOpen = false;
   const NEW_CATEGORY = document.getElementById("new-category");
   const NEW_TASK = document.getElementById("task-input");
   const ADD_TASK_BUTTON = document.getElementById("add-task");
@@ -117,6 +119,7 @@ import { apiConnection } from "./ApiConnection.js";
         task.note = event.target.value;
         task.noteSavedAt = getCurrentDate(OBJECT);
         apiConnection(POST, "task", selectedTask);
+        selectedTask = task;
         renderNoteStatus();
       }
     });
@@ -153,7 +156,7 @@ import { apiConnection } from "./ApiConnection.js";
   function applySelectedTask(event) {
     if (event == null) {
       renderSelectedTask();
-    } else {
+    } else if (event != null) {
       if (
         selectedTask != null &&
         event.target.id != selectedTask.id &&
@@ -289,10 +292,13 @@ import { apiConnection } from "./ApiConnection.js";
       RIGHT_SIDE.className = "right-side-closed";
       removeTaskHighlight();
       selectedTask = null;
+      isRightContainerOpen = false;
       applySelectedTask();
+      isRightContainerOpen = false;
     } else if (adjust == OPEN) {
       CENTER.className = "center";
       RIGHT_SIDE.className = "right-side";
+      isRightContainerOpen = true;
     }
     events();
   }
@@ -307,7 +313,7 @@ import { apiConnection } from "./ApiConnection.js";
    */
   function applySelectedCategory(event) {
     if (event == null) {
-      renderTasks();
+      renderTasks(taskList);
       renderSelectedCategory();
     } else {
       for (let i = 0; i < categoryList.length; i++) {
@@ -420,21 +426,22 @@ import { apiConnection } from "./ApiConnection.js";
         name: NEW_CATEGORY.value,
       };
       const RESPONSE = apiConnection(POST, "category", userCategory);
-      getCategories();
-      RESPONSE.then((newCategoryId) => {
+      RESPONSE.then(() => {
         NEW_CATEGORY.value = "";
-        selectedCategory = categoryList[newCategoryId - 1];
-        getCategories();
+        getCategories(NEW_CATEGORY_ADDED);
+        renderSelectedCategory();
         controlRightSide(CLOSE);
-        applySelectedCategory();
       });
     }
   }
 
-  function getCategories() {
+  function getCategories(isNewCategoryAdded) {
     const CATEGORIES = apiConnection(GET, "categories");
     CATEGORIES.then((categories) => {
       categoryList = categories;
+      if (isNewCategoryAdded) {
+        selectedCategory = categoryList[categoryList.length - 1];
+      }
       renderCategory(categoryList);
     });
   }
@@ -472,8 +479,8 @@ import { apiConnection } from "./ApiConnection.js";
     });
     if (selectedCategory == null) {
       selectedCategory = categoryList[0];
-      renderSelectedCategory();
     }
+    renderSelectedCategory();
   }
 
   /**
@@ -527,7 +534,7 @@ import { apiConnection } from "./ApiConnection.js";
     const TASKS = apiConnection(GET, "tasks");
     TASKS.then((tasks) => {
       taskList = tasks;
-      renderTasks(taskList);
+      renderTasks(tasks);
     });
   }
 
@@ -547,6 +554,11 @@ import { apiConnection } from "./ApiConnection.js";
     sortedTasks.forEach((task) => {
       let taskCategoryIds = task.categoryIds;
       taskCategoryIds.forEach((category) => {
+        if (selectedTask != null) {
+          if (task.id == selectedTask.id) {
+            selectedTask == task;
+          }
+        }
         if (selectedCategoryId == category && category != null) {
           let listItem = createHTMLElement("li", {
             className: "task",
@@ -573,7 +585,9 @@ import { apiConnection } from "./ApiConnection.js";
       });
     });
     sortedTasks = tasks.reverse();
-    applySelectedTask();
+    if (isRightContainerOpen) {
+      applySelectedTask();
+    }
     events();
   }
 
@@ -632,6 +646,11 @@ import { apiConnection } from "./ApiConnection.js";
       if (event.target.parentNode.id == task.id) {
         assignTaskStatus(task, iconStyle);
         apiConnection(POST, "task", task);
+        if (selectedTask != null) {
+          if (selectedTask.id == task.id) {
+            selectedTask = task;
+          }
+        }
       }
     });
     getTasks();
@@ -690,6 +709,11 @@ import { apiConnection } from "./ApiConnection.js";
       if (event.target.parentNode.id == task.id) {
         assignImportantTask(task, iconStyle);
         apiConnection(POST, "task", task);
+        if (selectedTask != null) {
+          if (selectedTask.id == task.id) {
+            selectedTask = task;
+          }
+        }
       }
     });
     getTasks();
