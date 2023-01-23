@@ -17,6 +17,7 @@
   </head>
   <body>
     <div class="container">
+      <!-- Top contaoiner contains additional and user interactive operation eg. task search-->
       <div class="top-container">
         <button class="apps-icon">
           <i class="material-icons">apps</i>
@@ -90,7 +91,7 @@
         <!-- Center contains the main interactive element in the webpage -->
         <div div class="center" id="center-block">
           <div class="center-head" id="center-head">
-            <div class="center-head-icon" onclick="openLeftSide()">
+            <div class="center-head-icon">
               <i class="material-icons" id="center-head-icon">light_mode</i>
             </div>
             <div class="center-head-desc">
@@ -115,6 +116,7 @@
                   placeholder="Add a task"
                 />
               </div>
+              <!--Contains additional tools for adding task and click button for applying the task-->
               <div class="origin-feature">
                 <i class="material-icons">calendar_month</i>
                 <i class="material-icons">notifications</i>
@@ -124,11 +126,13 @@
                 </div>
               </div>
             </div>
+            <!--Contains the task list of the user or the user enters-->
             <div class="task-list-container">
               <ul class="task-list" id="task-list"></ul>
             </div>
           </div>
         </div>
+        <!--Contains a sidebar for selected task console operation eg. note-->
         <div class="right-side" id="right-side">
           <div class="right-side-top">
             <div class="right-side-main">
@@ -172,6 +176,7 @@
             </div>
           </div>
           <hr />
+          <!--Extra accessibilities for right side, eg. hide and delete-->
           <div class="right-side-bottom">
             <div class="hide-right-side" id="hide-right-side">
               <i class="material-icons">logout</i>

@@ -1,7 +1,7 @@
 import { apiConnection } from "./ApiConnection.js";
 
 /**
- * Self invoking function which acts as a class
+ * Self invoking function which acts as a container
  * for certain variables and functions for the webpage
  * Contains all the support for the todo webpage
  * for organising the data such as
@@ -12,43 +12,46 @@ import { apiConnection } from "./ApiConnection.js";
  * @since 28/12/2022
  */
 (function () {
-  const DISPLAY = "display";
-  const OBJECT = "object";
+  const GET = "GET";
+  const POST = "POST";
   const OPEN = "open";
   const CLOSE = "close";
-  const UNTITLED = "Untitled Text";
-  const CREATED_TODAY = "Created today";
-  const CREATED_ON = "Created on ";
-  const UPDATED_TODAY = "Updated Today";
-  const UPDATED_ON = "Updated on ";
-  const TASK_COMPLETED_ICON = "fa-regular fa-circle-check";
-  const TASK_PENDING_ICON = "fa-regular fa-circle";
-  const NOT_IMPORTANT_ICON = "fa-regular fa-star";
-  const IMPORTANT_ICON = "fa-solid fa-star";
-  const LAST_STATIC_CATEGORY_ID = 5;
+  const OBJECT = "object";
+  const DISPLAY = "display";
   const NEW_CATEGORY_ADDED = true;
-  const POST = "POST";
-  const GET = "GET";
+  const UNTITLED = "Untitled Text";
+  const CREATED_ON = "Created on ";
+  const UPDATED_ON = "Updated on ";
+  const LAST_STATIC_CATEGORY_ID = 5;
+  const CREATED_TODAY = "Created today";
+  const UPDATED_TODAY = "Updated Today";
+  const IMPORTANT_ICON = "fa-solid fa-star";
+  const NOT_IMPORTANT_ICON = "fa-regular fa-star";
+  const TASK_PENDING_ICON = "fa-regular fa-circle";
+  const TASK_COMPLETED_ICON = "fa-solid fa-circle-check";
 
-  let categoryList = [];
+  const NEW_TASK = document.getElementById("task-input");
+  const RIGHT_SIDE = document.getElementById("right-side");
+  const TASK_LIST = document.getElementsByClassName("task");
+  const ADD_TASK_BUTTON = document.getElementById("add-task");
+  const NEW_CATEGORY = document.getElementById("new-category");
+  const CATEGORY_LIST = document.getElementsByClassName("category");
 
   let taskList = [];
-
-  let selectedCategory = null;
+  let categoryList = [];
   let selectedTask = null;
+  let selectedCategory = null;
   let isRightContainerOpen = false;
-  const NEW_CATEGORY = document.getElementById("new-category");
-  const NEW_TASK = document.getElementById("task-input");
-  const ADD_TASK_BUTTON = document.getElementById("add-task");
-  const CATEGORY_LIST = document.getElementsByClassName("category");
-  const TASK_LIST = document.getElementsByClassName("task");
-  const RIGHT_SIDE = document.getElementById("right-side");
 
   /**
    * main init function which calls the corresponding functions
    * init gets called at the start of the scope
    * works as a main unit for to-do manipulation process
    * calls functions sequentially to use required function for the right time
+   * renders the categories and tasks and applies the current date,
+   * and renders the selected category for applying the task,
+   * at default it will be 1st category added, after all the renders over,
+   * it applies the events for user interaction to the webpage
    */
   function init() {
     getCategories();
@@ -109,8 +112,8 @@ import { apiConnection } from "./ApiConnection.js";
    * text entry from the user will be received by the event listener
    * and will be applied on real time to the selected task
    *
-   * @param {*} event - applies the event from the user, text entry will
-   *                    automatically generates a event
+   * @param event - applies the event from the user, text entry will
+   *                automatically generates a event
    *
    */
   function applyNoteToTask(event) {
@@ -150,8 +153,8 @@ import { apiConnection } from "./ApiConnection.js";
    * of the task in console such as notes, steps and so on,
    * it checks the selected task request is really available in the
    * account storage and carries to call the render
-   * @param {*} event - event from the user, click event in a list of
-   *                    task will present as a new event using event listeners
+   * @param event - event from the user, click event in a list of
+   *                task will present as a new event using event listeners
    */
   function applySelectedTask(event) {
     if (event == null) {
@@ -179,7 +182,8 @@ import { apiConnection } from "./ApiConnection.js";
    * Removes the selected task highlight design such that, the task
    * highlight can be refreshed and be set for the other,
    * This function helps to remove the old selected task's
-   * highlight to show which was newly selected
+   * highlight to show which was newly selected,
+   * usually helps to get rid of old task higlight to provide a better experience
    */
   function removeTaskHighlight() {
     const CURRENT_TASK = document.getElementsByClassName(
@@ -196,6 +200,7 @@ import { apiConnection } from "./ApiConnection.js";
    * is valid and rendering will occur to show which was selected
    * After a succesfull highlighting of the selected task,
    * the right side will be rendered
+   * Refreshes the events after the selected category was applied
    */
   function renderSelectedTask() {
     if (selectedTask != null) {
@@ -215,6 +220,10 @@ import { apiConnection } from "./ApiConnection.js";
    * commonly used when a task gets selected from the task list
    * to make use of right side to get control of the task console
    * like note, steps and etc.
+   * Right side render is based upon the selected task,
+   * it will throw error if there is no selected task applied
+   * after rendering it will open the right side and
+   * renders the old notes applied and also the task created at
    */
   function renderRightSide() {
     let rightTaskInfo = RIGHT_SIDE.getElementsByClassName("selected-task")[0];
@@ -242,19 +251,21 @@ import { apiConnection } from "./ApiConnection.js";
    * different classname according to task status will be designed
    * accordingly using css
    *
-   * @param {*} selectedTask
-   * @returns a text html element with a classname
+   * @param task - Contains the task for rendering the task name
+   *               based upon the completion status of the task
+   * @returns a text html element with a classname mentioning
+   *          the task completed or uncompleted
    */
-  function getCorrespondingText(selectedTask) {
-    if (selectedTask.isCompleted) {
+  function getCorrespondingText(task) {
+    if (task.isCompleted) {
       return createHTMLElement("p", {
         className: "completed-task-name",
-        content: selectedTask.name,
+        content: task.name,
       });
     } else {
       return createHTMLElement("p", {
         className: "task-name",
-        content: selectedTask.name,
+        content: task.name,
       });
     }
   }
@@ -281,9 +292,9 @@ import { apiConnection } from "./ApiConnection.js";
    * like note, steps and etc.
    * Right side closes when the user changes the category or clicks the
    * slide button on the ride side
-   * @param {*} adjust - For adjusting the right side render, it lets selected task corner
-   *                     render out or removes the render when there is no use case for
-   *                     the selected task render(Right side).
+   * @param adjust - For adjusting the right side render, it lets selected task corner
+   *                 render out or removes the render when there is no use case for
+   *                 the selected task render(Right side).
    */
   function controlRightSide(adjust) {
     const CENTER = document.getElementById("center-block");
@@ -308,8 +319,8 @@ import { apiConnection } from "./ApiConnection.js";
    * This function confronts the selected category is actually available in the
    * storage and makes it the new selected category and calls the necessary
    * function to render
-   * @param {*} event - Contains a event to apply a selected category
-   *                    event based upon the user selection of the list of categories
+   * @param event - Contains a event to apply a selected category
+   *                event based upon the user selection of the list of categories
    */
   function applySelectedCategory(event) {
     if (event == null) {
@@ -332,6 +343,7 @@ import { apiConnection } from "./ApiConnection.js";
    * Removes the highlight for the category
    * removing the category highlight happens when the new category
    * has been selected by the user so the highlight has replaced by another one
+   * usually removes the category highlight to get rid of redundancy of selected category
    */
   function removeCategoryHighlight() {
     const CURRENT_CATEGORY =
@@ -346,6 +358,7 @@ import { apiConnection } from "./ApiConnection.js";
    * user created category also can be selected
    * The main purpose of the selected category is to sort the task to their categories
    * for the ease of use for the user
+   * refreshed the events after the selected category has rendered
    */
   function renderSelectedCategory() {
     for (let i = 0; i < CATEGORY_LIST.length; i++) {
@@ -366,8 +379,8 @@ import { apiConnection } from "./ApiConnection.js";
    * Checkes the element based upon their requirement,
    * to get rid of getting a error while
    * the elements has no use of classname or innertext
-   * @param {*} tagName - contains a tagname for the upcomming html element
-   * @param {*} element - elements that an html tag can have eg. class name, id and etc.
+   * @param tagName - contains a tagname for the upcomming html element
+   * @param element - elements that an html tag can have eg. class name, id and etc.
    * @returns final created html element to make use of in html document insertion
    */
   function createHTMLElement(tagName, element) {
@@ -390,21 +403,21 @@ import { apiConnection } from "./ApiConnection.js";
    * Date is formatted to that the
    * month and weekday as long text
    * and day as in number
-   * @param {*} type - contains what type of date is needed,
-   *                   one can display the date information in the top page of category header
-   *                   another will returns object for corresponding function in use
+   * @param type - contains what type of date is needed,
+   *               one can display the date information in the top page of category header
+   *               another will returns object for corresponding function in use
    * @returns a formatted date object
    */
   function getCurrentDate(type) {
-    const date = new Date().toLocaleDateString("en-us", {
+    const DATE = new Date().toLocaleDateString("en-us", {
       weekday: "long",
       month: "long",
       day: "numeric",
     });
     if (type === DISPLAY) {
-      document.getElementById("current-date").innerText = date;
+      document.getElementById("current-date").innerText = DATE;
     } else if (type === OBJECT) {
-      return date;
+      return DATE;
     }
   }
 
@@ -413,8 +426,8 @@ import { apiConnection } from "./ApiConnection.js";
    * In which groups can be mentioned as the to-do-list holder
    * they contain list of to-do-list
    * groups adds up when the user enters the text and pressed the enter key
-   * @param {*} event - contains a enter event for category when user
-   *                    wants to create a category
+   * @param event - contains a enter event for category when user
+   *                wants to create a category
    */
   function addCategory(event) {
     if (event.key === "Enter") {
@@ -435,12 +448,23 @@ import { apiConnection } from "./ApiConnection.js";
     }
   }
 
+  /**
+   * Gets the categories from the api and applies to a temporary categoryList
+   * Renders the final category after the category has successfully got from the api
+   * if the new category is added it makes the new category as it selected category
+   * rendering selected category will be applied hierarchicaly in rendering category
+   * @param isNewCategoryAdded - a boolean parameter to make sure if this method
+   *                             is called after a new category is added or not, if its true
+   *                             it applies the new categroy as its selected category,
+   *                             if not it just renders the category
+   */
   function getCategories(isNewCategoryAdded) {
     const CATEGORIES = apiConnection(GET, "categories");
     CATEGORIES.then((categories) => {
       categoryList = categories;
       if (isNewCategoryAdded) {
         selectedCategory = categoryList[categoryList.length - 1];
+        applySelectedCategory();
       }
       renderCategory(categoryList);
     });
@@ -452,6 +476,7 @@ import { apiConnection } from "./ApiConnection.js";
    * Category is a list which can contain both predefined category(From the backend)
    * and user defined category(from the end user interacting the webpage)
    * category can contain tasks
+   * @param categoryList - an list of categories that contain the category name, id, and icon name.
    */
   function renderCategory(categoryList) {
     let CATEGORY_LIST = document.getElementById("sidebar-category");
@@ -488,8 +513,8 @@ import { apiConnection } from "./ApiConnection.js";
    * In which tasks are the entries that user enters
    * Tasks can be divided upon categories for ease of use
    * Tasks has status to mention if the task is finished or not
-   * @param {*} event - has a enter and click event from the user
-   *                    to add a task using event listeners
+   * @param event - has a enter and click event from the user
+   *                to add a task using event listeners
    */
   function addTask(event) {
     if (event.key === "Enter" || event.type == "click") {
@@ -505,9 +530,10 @@ import { apiConnection } from "./ApiConnection.js";
           note: null,
           noteSavedAt: null,
         };
-        apiConnection(POST, "task", userTask);
-        getTasks();
-        NEW_TASK.value = "";
+        apiConnection(POST, "task", userTask).then(() => {
+          getTasks();
+          NEW_TASK.value = "";
+        });
       }
     }
   }
@@ -530,6 +556,13 @@ import { apiConnection } from "./ApiConnection.js";
     return allocatedCategory;
   }
 
+  /**
+   * Gets the tasks from the api and applies to a temporary task list
+   * after applying successfully it renders the tasks
+   * the tasks will be rendered based upon the category selected
+   * and the task status and importance will be rendered according
+   * to the task objects in the list while rendering
+   */
   function getTasks() {
     const TASKS = apiConnection(GET, "tasks");
     TASKS.then((tasks) => {
@@ -545,45 +578,18 @@ import { apiConnection } from "./ApiConnection.js";
    * Each task icons will be rendered based upon the status
    * if a task is completed the icon will be automatically rendered as completed
    * same for importance of the task
+   * @param tasks - contains a task list which will be iterated and rendered according
+   *                to the completion status, importance and with corresponding category
    */
   function renderTasks(tasks) {
     let taskList = document.getElementById("task-list");
     taskList.innerHTML = "";
-    let selectedCategoryId = selectedCategory.id;
     let sortedTasks = tasks.reverse();
-    sortedTasks.forEach((task) => {
-      let taskCategoryIds = task.categoryIds;
-      taskCategoryIds.forEach((category) => {
-        if (selectedTask != null) {
-          if (task.id == selectedTask.id) {
-            selectedTask == task;
-          }
-        }
-        if (selectedCategoryId == category && category != null) {
-          let listItem = createHTMLElement("li", {
-            className: "task",
-            id: task.id,
-          });
-          let icon = getTaskStatusIcon(task);
-          let taskInfoDiv = createHTMLElement("div", {
-            className: "task-info",
-          });
-          let text = getCorrespondingText(task);
-          let footer = createHTMLElement("p", {
-            className: "labels",
-            content: "Tasks",
-          });
-          let importantIcon = getTaskImportantIcon(task);
-
-          taskList.appendChild(listItem);
-          listItem.appendChild(icon);
-          listItem.appendChild(taskInfoDiv);
-          taskInfoDiv.appendChild(text);
-          taskInfoDiv.appendChild(footer);
-          listItem.appendChild(importantIcon);
-        }
-      });
-    });
+    let taskCompletedCount = renderIncompleteTasks(sortedTasks);
+    if (taskCompletedCount > 0) {
+      createCompletedTaskHeader(taskCompletedCount);
+      renderCompletedTasks(sortedTasks);
+    }
     sortedTasks = tasks.reverse();
     if (isRightContainerOpen) {
       applySelectedTask();
@@ -591,11 +597,98 @@ import { apiConnection } from "./ApiConnection.js";
     events();
   }
 
+  function renderCompletedTasks(sortedTasks) {
+    let selectedCategoryId = selectedCategory.id;
+    sortedTasks.forEach((task) => {
+      let taskCategoryIds = task.categoryIds;
+      taskCategoryIds.forEach((category) => {
+        if (
+          selectedCategoryId == category &&
+          category != null &&
+          task.isCompleted
+        ) {
+          generateTaskRender(task);
+        }
+      });
+    });
+  }
+
+  function renderIncompleteTasks(sortedTasks) {
+    let taskCompletedCount = 0;
+    let selectedCategoryId = selectedCategory.id;
+    sortedTasks.forEach((task) => {
+      let taskCategoryIds = task.categoryIds;
+      taskCategoryIds.forEach((category) => {
+        if (selectedTask != null) {
+          if (task.id == selectedTask.id) {
+            selectedTask = task;
+          }
+        }
+        if (
+          selectedCategoryId == category &&
+          category != null &&
+          !task.isCompleted
+        ) {
+          generateTaskRender(task);
+        } else if (
+          selectedCategoryId == category &&
+          category != null &&
+          task.isCompleted
+        ) {
+          taskCompletedCount++;
+        }
+      });
+    });
+    return taskCompletedCount;
+  }
+
+  function generateTaskRender(task) {
+    let taskList = document.getElementById("task-list");
+    let listItem = createHTMLElement("li", {
+      className: "task",
+      id: task.id,
+    });
+    let icon = getTaskStatusIcon(task);
+    let taskInfoDiv = createHTMLElement("div", {
+      className: "task-info",
+    });
+    let text = getCorrespondingText(task);
+    let footer = createHTMLElement("p", {
+      className: "labels",
+      content: "Tasks",
+    });
+    let importantIcon = getTaskImportantIcon(task);
+    taskList.appendChild(listItem);
+    listItem.appendChild(icon);
+    listItem.appendChild(taskInfoDiv);
+    taskInfoDiv.appendChild(text);
+    taskInfoDiv.appendChild(footer);
+    listItem.appendChild(importantIcon);
+  }
+
+  function createCompletedTaskHeader(taskCompletedCount) {
+    let taskList = document.getElementById("task-list");
+    let completedHeader = createHTMLElement("li", {
+      className: "completed-task-header",
+      id: "completed-task-header",
+    });
+    let completedText = createHTMLElement("p", {
+      className: "header-text",
+      content: "v   Completed",
+    });
+    let count = createHTMLElement("p", {
+      className: "count",
+      content: taskCompletedCount,
+    });
+    taskList.appendChild(completedHeader);
+    completedHeader.appendChild(completedText);
+    completedHeader.appendChild(count);
+  }
   /**
    * confirms the icon based upon the status of the task
    * i.e basis upon the completion of the task
    * This function creates an html element for the task status icon
-   * @param {*} task - contains a task object get a task status icon
+   * @param task - contains a task object get a task status icon
    * @returns an html element of a icon based upon the task status
    */
   function getTaskStatusIcon(task) {
@@ -616,7 +709,7 @@ import { apiConnection } from "./ApiConnection.js";
    * or in which a task is selected important by the user
    * This function creates an html element for icon
    * based upon the importancy status
-   * @param {*} task - contains a task object get a task importance icon
+   * @param task - contains a task object get a task importance icon
    * @returns an html element of a icon based upon the task importance
    */
   function getTaskImportantIcon(task) {
@@ -637,8 +730,8 @@ import { apiConnection } from "./ApiConnection.js";
    * or to mark it as pending, false.
    * The mark is based upon the user action which is executed using
    * Click event on the radio icon
-   * @param {*} event - the event from the user, click which
-   *                    was generated by the event listener
+   * @param event - the event from the user, click which
+   *                was generated by the event listener
    */
   function applyTaskStatus(event) {
     let iconStyle = event.target.className;
@@ -664,8 +757,8 @@ import { apiConnection } from "./ApiConnection.js";
    * Click event on the radio icon.
    * This function doesnt gets any event when there is no task was selected,
    * selected a task generates a right side
-   * @param {*} event - the event from the user, click which
-   *                    was generated by the event listener
+   * @param event - the event from the user, click which
+   *                was generated by the event listener
    */
   function applySelectedTaskStatus(event) {
     let iconStyle = event.target.className;
@@ -681,8 +774,8 @@ import { apiConnection } from "./ApiConnection.js";
   /**
    * assigns a task status in basis of rollbacking a event of what user applies a event,
    * i.e rollbacking a completed task to not completed when the user click it
-   * @param {*} task - contains a task to update its status of completed or pending
-   * @param {*} iconStyle - to check the type of icon style user clicks on
+   * @param task - contains a task to update its status of completed or pending
+   * @param iconStyle - to check the type of icon style user clicks on
    */
   function assignTaskStatus(task, iconStyle) {
     if (iconStyle == TASK_COMPLETED_ICON) {
@@ -700,23 +793,24 @@ import { apiConnection } from "./ApiConnection.js";
    * category it holds
    * The mark is based upon the user action which is executed using
    * Click event on the star icon
-   * @param {*} event - the event from the user, click which
-   *                    was generated by the event listener
+   * @param event - the event from the user, click which
+   *                was generated by the event listener
    */
   function applyImportantTask(event) {
     let iconStyle = event.target.className;
     taskList.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
         assignImportantTask(task, iconStyle);
-        apiConnection(POST, "task", task);
-        if (selectedTask != null) {
-          if (selectedTask.id == task.id) {
-            selectedTask = task;
+        apiConnection(POST, "task", task).then(() => {
+          if (selectedTask != null) {
+            if (selectedTask.id == task.id) {
+              selectedTask = task;
+            }
           }
-        }
+          getTasks();
+        });
       }
     });
-    getTasks();
   }
 
   /**
@@ -727,8 +821,8 @@ import { apiConnection } from "./ApiConnection.js";
    * Click event on the star icon.
    * This function doesnt gets any event when there is no task was selected,
    * selected a task generates a right side
-   * @param {*} event - the event from the user, click which
-   *                    was generated by the event listener
+   * @param event - the event from the user, click which
+   *                was generated by the event listener
    */
   function applySelectedTaskImportant(event) {
     let iconStyle = event.target.className;
@@ -744,8 +838,9 @@ import { apiConnection } from "./ApiConnection.js";
   /**
    * assigns a task importance in basis of rollbacking a event of what user applies a event,
    * i.e rollbacking a important task to normal task when a user clicks it
-   * @param {*} task - contains a task to update its status of completed or pending
-   * @param {*} iconStyle - to check the type of icon style user clicks on
+   * gets the category index and removes the old importance to avoid repetition
+   * @param task - contains a task to update its status of completed or pending
+   * @param iconStyle - to check the type of icon style user clicks on
    */
   function assignImportantTask(task, iconStyle) {
     if (iconStyle == IMPORTANT_ICON) {
@@ -756,5 +851,5 @@ import { apiConnection } from "./ApiConnection.js";
     }
   }
 
-  init(); //calling init method
+  init();
 })();
