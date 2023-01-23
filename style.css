@@ -615,8 +615,6 @@ html body {
     cursor: pointer;
 }
 
-
-/* For dynamic html */
 .container .bottom-container .right-side-closed {
     display: none;
 }
@@ -664,4 +662,10 @@ html body {
     opacity: 0.6;
 }
 
-/* Dynamic ends here*/
+.container .bottom-container .center .center-main .task-list-container hr {
+    width: 94%;
+}
+
+.container .bottom-container .center .center-main .task-list-container .completed-task-header p {
+    display: inline-block;
+}
