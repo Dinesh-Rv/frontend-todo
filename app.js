@@ -586,7 +586,7 @@ import { apiConnection } from "./ApiConnection.js";
     taskList.innerHTML = "";
     let sortedTasks = tasks.reverse();
     let taskCompletedCount = renderIncompleteTasks(sortedTasks);
-    if (taskCompletedCount > 0) {
+    if (taskCompletedCount > 0 && selectedCategory.id != 2) {
       createCompletedTaskHeader(taskCompletedCount);
       renderCompletedTasks(sortedTasks);
     }
@@ -674,7 +674,7 @@ import { apiConnection } from "./ApiConnection.js";
     });
     let completedText = createHTMLElement("p", {
       className: "header-text",
-      content: "v   Completed",
+      content: "Completed",
     });
     let count = createHTMLElement("p", {
       className: "count",
@@ -738,15 +738,19 @@ import { apiConnection } from "./ApiConnection.js";
     taskList.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
         assignTaskStatus(task, iconStyle);
-        apiConnection(POST, "task", task);
-        if (selectedTask != null) {
-          if (selectedTask.id == task.id) {
-            selectedTask = task;
+        apiConnection(POST, "task", task).then(() => {
+          if (selectedTask != null) {
+            if (selectedTask.id == task.id) {
+              selectedTask = task;
+            }
           }
-        }
+          getTasks();
+          if (isRightContainerOpen) {
+            renderRightSide();
+          }
+        });
       }
     });
-    getTasks();
   }
 
   /**
@@ -765,8 +769,10 @@ import { apiConnection } from "./ApiConnection.js";
     if (selectedTask != null) {
       if (event.target.parentNode.id == "selected-task") {
         assignTaskStatus(selectedTask, iconStyle);
-        apiConnection(POST, "task", selectedTask);
-        getTasks();
+        apiConnection(POST, "task", selectedTask).then(() => {
+          getTasks();
+          renderRightSide();
+        });
       }
     }
   }
@@ -829,8 +835,10 @@ import { apiConnection } from "./ApiConnection.js";
     if (selectedTask != null) {
       if (event.target.parentNode.id == "selected-task") {
         assignImportantTask(selectedTask, iconStyle);
-        apiConnection(POST, "task", selectedTask);
-        getTasks();
+        apiConnection(POST, "task", selectedTask).then(() => {
+          getTasks();
+          renderRightSide();
+        });
       }
     }
   }
