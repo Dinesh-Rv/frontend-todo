@@ -12,7 +12,7 @@ html body {
 .container .bottom-container .left-side {
     background-color: white;
     height: 560px;
-    width: 290px;
+    width: 21.3%;
     margin-top: 0px;
 }
 
@@ -141,7 +141,7 @@ html body {
     font-size: 14px;
     list-style: none;
     padding-left: 0px;
-    width: 273px;
+    width: 100%;
     margin-top: 3px;
     margin-bottom: 2px;
 }
@@ -152,7 +152,7 @@ html body {
 }
 
 .container .bottom-container .left-side .sidebar-content .sidebar-category .category:hover,
-.container .bottom-container .center .center-main .task-list-container .task-list li:hover {
+.container .bottom-container .center .center-main .task-list-container .task-list .task:hover {
     cursor: pointer;
     background-color: #f5f5f5;
 }
@@ -208,6 +208,10 @@ html body {
 .container .bottom-container .left-side .sidebar-content,
 .container .bottom-container .center .center-main .task-list-container {
     overflow-y: auto;
+}
+
+.container .bottom-container .left-side .sidebar-content::-webkit-scrollbar {
+    display: none;
 }
 
 .container .bottom-container .left-side .sidebar-center .add-new-list .left-side-icon,
@@ -306,7 +310,7 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-origin {
     background-color: white;
-    height: 110px;
+    height: 100%;
     margin-left: 25px;
     text-align: left;
     box-shadow: 1px 1px 3px gray;
@@ -345,10 +349,9 @@ html body {
 }
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature {
-    height: 45px;
     text-align: left;
     background-color: #f5f5f5;
-    padding: 2% 0% 0% 5%;
+    padding: 1% 0% 1% 5%;
 }
 
 .container .bottom-container .center .center-main .task-list-origin .origin-feature .material-icons {
@@ -370,7 +373,7 @@ html body {
     padding-left: 25px;
 }
 
-.container .bottom-container .center .center-main .task-list-container .task-list li {
+.container .bottom-container .center .center-main .task-list-container .task-list .task {
     height: 50px;
     width: 99.8%;
     display: block;
@@ -625,7 +628,7 @@ html body {
 }
 
 .container .bottom-container .center-right-wide .center-main .task-list-origin {
-    box-shadow: 0px 7px 4px grey;
+    box-shadow: 0px 0px 2px grey;
 }
 
 .container .bottom-container .center-right-wide .center-main .task-list-container .task-list li .task-info {
@@ -668,4 +671,16 @@ html body {
 
 .container .bottom-container .center .center-main .task-list-container .completed-task-header p {
     display: inline-block;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .completed-task-header .header-text {
+    font-weight: bold;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .completed-task-header .count {
+    margin-left: 2%;
+}
+
+.container .bottom-container .center .center-main .task-list-container .task-list .completed-task-header:hover {
+    cursor: pointer;
 }
