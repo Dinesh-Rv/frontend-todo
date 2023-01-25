@@ -12,7 +12,7 @@ html body {
 .container .bottom-container .left-side {
     background-color: white;
     height: 560px;
-    width: 21.3%;
+    width: 22%;
     margin-top: 0px;
 }
 
@@ -169,6 +169,7 @@ html body {
     margin-top: 28px;
     margin-bottom: 0px;
     margin-left: 23px;
+    width: 25px;
 }
 
 .container .bottom-container .left-side .menu-icon .material-icons:hover {

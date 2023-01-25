@@ -1,4 +1,10 @@
-import { apiConnection } from "./ApiConnection.js";
+import {
+  addNewCategory,
+  addNewTask,
+  getAllCategories,
+  getAllTasks,
+  updateTask,
+} from "./service.js";
 
 /**
  * Self invoking function which acts as a container
@@ -12,8 +18,6 @@ import { apiConnection } from "./ApiConnection.js";
  * @since 28/12/2022
  */
 (function () {
-  const GET = "GET";
-  const POST = "POST";
   const OPEN = "open";
   const CLOSE = "close";
   const OBJECT = "object";
@@ -35,6 +39,7 @@ import { apiConnection } from "./ApiConnection.js";
   const TASK_LIST = document.getElementsByClassName("task");
   const ADD_TASK_BUTTON = document.getElementById("add-task");
   const NEW_CATEGORY = document.getElementById("new-category");
+  const LEFT_SIDE_MENU = document.getElementById("hide-left-side");
   const CATEGORY_LIST = document.getElementsByClassName("category");
 
   let taskList = [];
@@ -42,6 +47,7 @@ import { apiConnection } from "./ApiConnection.js";
   let selectedTask = null;
   let selectedCategory = null;
   let isRightContainerOpen = false;
+  let isLeftContainerOpen = true;
 
   /**
    * main init function which calls the corresponding functions
@@ -121,9 +127,11 @@ import { apiConnection } from "./ApiConnection.js";
       if (task.id == selectedTask.id) {
         task.note = event.target.value;
         task.noteSavedAt = getCurrentDate(OBJECT);
-        apiConnection(POST, "task", selectedTask);
-        selectedTask = task;
-        renderNoteStatus();
+        //You've changed selectedTask to task in parameter. and applied after .then here
+        updateTask(task).then(() => {
+          selectedTask = task;
+          renderNoteStatus();
+        });
       }
     });
   }
@@ -415,7 +423,8 @@ import { apiConnection } from "./ApiConnection.js";
       day: "numeric",
     });
     if (type === DISPLAY) {
-      document.getElementById("current-date").innerText = DATE;
+      document.getElementById("current-date").innerText =
+        moment().format("dddd, MMMM D");
     } else if (type === OBJECT) {
       return DATE;
     }
@@ -438,7 +447,7 @@ import { apiConnection } from "./ApiConnection.js";
         iconName: "list",
         name: NEW_CATEGORY.value,
       };
-      const RESPONSE = apiConnection(POST, "category", userCategory);
+      const RESPONSE = addNewCategory(userCategory);
       RESPONSE.then(() => {
         NEW_CATEGORY.value = "";
         getCategories(NEW_CATEGORY_ADDED);
@@ -459,8 +468,7 @@ import { apiConnection } from "./ApiConnection.js";
    *                             if not it just renders the category
    */
   function getCategories(isNewCategoryAdded) {
-    const CATEGORIES = apiConnection(GET, "categories");
-    CATEGORIES.then((categories) => {
+    getAllCategories().then((categories) => {
       categoryList = categories;
       if (isNewCategoryAdded) {
         selectedCategory = categoryList[categoryList.length - 1];
@@ -530,7 +538,7 @@ import { apiConnection } from "./ApiConnection.js";
           note: null,
           noteSavedAt: null,
         };
-        apiConnection(POST, "task", userTask).then(() => {
+        addNewTask(userTask).then(() => {
           getTasks();
           NEW_TASK.value = "";
         });
@@ -564,8 +572,7 @@ import { apiConnection } from "./ApiConnection.js";
    * to the task objects in the list while rendering
    */
   function getTasks() {
-    const TASKS = apiConnection(GET, "tasks");
-    TASKS.then((tasks) => {
+    getAllTasks().then((tasks) => {
       taskList = tasks;
       renderTasks(tasks);
     });
@@ -597,6 +604,15 @@ import { apiConnection } from "./ApiConnection.js";
     events();
   }
 
+  /**
+   * Renders the completed task
+   * Completed task is based upon the task status which was completed
+   * in the webpage the completed task will be denoted with a
+   * checked circle on the left side of the task
+   * Completed tasks will render after the pending tasks rendered,
+   * @param sortedTasks - Will receive sorted task list to display the tasks in a
+   *                      sorted manner to avoid confusion of tasks added to the user
+   */
   function renderCompletedTasks(sortedTasks) {
     let selectedCategoryId = selectedCategory.id;
     sortedTasks.forEach((task) => {
@@ -613,22 +629,28 @@ import { apiConnection } from "./ApiConnection.js";
     });
   }
 
+  /**
+   * Renders the incomplete tasks
+   * Incomplete task are the pending task from the user,
+   * or the task which was newly added will be carried on to incomplete task
+   * Incompleted task will be denoted with a unchecked circle on the left side
+   * This function will keep track of how many completed task it contains to
+   * support the rendering for completed task
+   * @param sortedTasks - Will receive sorted task list to display the tasks in a
+   *                      sorted manner to avoid confusion of tasks added to the user
+   * @returns - the count for completed task available,
+   *            count more than zero will render the completed task render
+   */
   function renderIncompleteTasks(sortedTasks) {
     let taskCompletedCount = 0;
     let selectedCategoryId = selectedCategory.id;
     sortedTasks.forEach((task) => {
       let taskCategoryIds = task.categoryIds;
       taskCategoryIds.forEach((category) => {
-        if (selectedTask != null) {
-          if (task.id == selectedTask.id) {
-            selectedTask = task;
-          }
+        if (selectedTask != null && task.id == selectedTask.id) {
+          selectedTask = task;
         }
-        if (
-          selectedCategoryId == category &&
-          category != null &&
-          !task.isCompleted
-        ) {
+        if (selectedCategoryId == category && !task.isCompleted) {
           generateTaskRender(task);
         } else if (
           selectedCategoryId == category &&
@@ -642,6 +664,12 @@ import { apiConnection } from "./ApiConnection.js";
     return taskCompletedCount;
   }
 
+  /**
+   * Creates a render for tasks by applying html elements
+   * and by appending the corresponding elements
+   * Each tasks will be rendered like a line in list in webpage
+   * @param task -contains the task to be rendered
+   */
   function generateTaskRender(task) {
     let taskList = document.getElementById("task-list");
     let listItem = createHTMLElement("li", {
@@ -666,6 +694,12 @@ import { apiConnection } from "./ApiConnection.js";
     listItem.appendChild(importantIcon);
   }
 
+  /**
+   * Generates the completed task header to mention
+   * that completed task starts below it
+   * Basically used to split completed and pending task to let the user know
+   * @param taskCompletedCount - The count for completed task which will be rendered in the header
+   */
   function createCompletedTaskHeader(taskCompletedCount) {
     let taskList = document.getElementById("task-list");
     let completedHeader = createHTMLElement("li", {
@@ -684,6 +718,7 @@ import { apiConnection } from "./ApiConnection.js";
     completedHeader.appendChild(completedText);
     completedHeader.appendChild(count);
   }
+
   /**
    * confirms the icon based upon the status of the task
    * i.e basis upon the completion of the task
@@ -738,7 +773,7 @@ import { apiConnection } from "./ApiConnection.js";
     taskList.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
         assignTaskStatus(task, iconStyle);
-        apiConnection(POST, "task", task).then(() => {
+        updateTask(task).then(() => {
           if (selectedTask != null) {
             if (selectedTask.id == task.id) {
               selectedTask = task;
@@ -769,7 +804,7 @@ import { apiConnection } from "./ApiConnection.js";
     if (selectedTask != null) {
       if (event.target.parentNode.id == "selected-task") {
         assignTaskStatus(selectedTask, iconStyle);
-        apiConnection(POST, "task", selectedTask).then(() => {
+        updateTask(selectedTask).then(() => {
           getTasks();
           renderRightSide();
         });
@@ -807,7 +842,7 @@ import { apiConnection } from "./ApiConnection.js";
     taskList.forEach((task) => {
       if (event.target.parentNode.id == task.id) {
         assignImportantTask(task, iconStyle);
-        apiConnection(POST, "task", task).then(() => {
+        updateTask(task).then(() => {
           if (selectedTask != null) {
             if (selectedTask.id == task.id) {
               selectedTask = task;
@@ -835,7 +870,7 @@ import { apiConnection } from "./ApiConnection.js";
     if (selectedTask != null) {
       if (event.target.parentNode.id == "selected-task") {
         assignImportantTask(selectedTask, iconStyle);
-        apiConnection(POST, "task", selectedTask).then(() => {
+        updateTask(selectedTask).then(() => {
           getTasks();
           renderRightSide();
         });

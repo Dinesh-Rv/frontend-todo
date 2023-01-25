@@ -93,7 +93,7 @@ public class Controller {
      *             based upon the request body from the user
      */
     @PostMapping("/task")
-    public void saveAndUpdateTask(@RequestBody Task task) {
+    public int saveAndUpdateTask(@RequestBody Task task) {
         if(task.getId() > 0) {
             Task oldTask = tasks.get(task.getId()-1);
             oldTask.setCategoryIds(task.getCategoryIds());
@@ -104,6 +104,7 @@ public class Controller {
             task.setId(++taskId);
             tasks.add(task);
         }
+        return task.getId();
     }
 
     /**
