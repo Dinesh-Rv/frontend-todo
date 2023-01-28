@@ -13,6 +13,7 @@ import {
  * for organising the data such as
  * tasks, categories and tools to handle the to do list
  * by the user
+ * Connects with service data transfer for tasks and categories
  *
  * @author Dinesh Ravikumar
  * @since 28/12/2022
