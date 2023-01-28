@@ -34,20 +34,24 @@ import {
   const TASK_PENDING_ICON = "fa-regular fa-circle";
   const TASK_COMPLETED_ICON = "fa-solid fa-circle-check";
 
+  const CENTER = document.getElementById("center-block");
+  const LEFT_SIDE = document.getElementById("left-side");
   const NEW_TASK = document.getElementById("task-input");
   const RIGHT_SIDE = document.getElementById("right-side");
   const TASK_LIST = document.getElementsByClassName("task");
   const ADD_TASK_BUTTON = document.getElementById("add-task");
   const NEW_CATEGORY = document.getElementById("new-category");
-  const LEFT_SIDE_MENU = document.getElementById("hide-left-side");
+  const LEFT_SIDE_MENU = document.getElementById("left-side-nav");
+  const CENTER_ICON = document.getElementById("center-head-icon");
   const CATEGORY_LIST = document.getElementsByClassName("category");
 
   let taskList = [];
   let categoryList = [];
   let selectedTask = null;
+  let currentCategoryIcon = null;
   let selectedCategory = null;
-  let isRightContainerOpen = false;
   let isLeftContainerOpen = true;
+  let isRightContainerOpen = false;
 
   /**
    * main init function which calls the corresponding functions
@@ -79,6 +83,9 @@ import {
     NEW_CATEGORY.addEventListener("keypress", addCategory);
     NEW_TASK.addEventListener("keypress", addTask);
     ADD_TASK_BUTTON.addEventListener("click", addTask);
+    LEFT_SIDE_MENU.addEventListener("click", controlLeftSide);
+
+    CENTER_ICON.addEventListener("click", controlLeftSide);
 
     for (let i = 0; i < CATEGORY_LIST.length; i++) {
       CATEGORY_LIST[i].addEventListener("click", applySelectedCategory);
@@ -127,7 +134,6 @@ import {
       if (task.id == selectedTask.id) {
         task.note = event.target.value;
         task.noteSavedAt = getCurrentDate(OBJECT);
-        //You've changed selectedTask to task in parameter. and applied after .then here
         updateTask(task).then(() => {
           selectedTask = task;
           renderNoteStatus();
@@ -305,21 +311,68 @@ import {
    *                 the selected task render(Right side).
    */
   function controlRightSide(adjust) {
-    const CENTER = document.getElementById("center-block");
     if (adjust == CLOSE || adjust.type == "click") {
-      CENTER.className = "center center-right-wide";
       RIGHT_SIDE.className = "right-side-closed";
       removeTaskHighlight();
       selectedTask = null;
       isRightContainerOpen = false;
+      applyCenterRender();
       applySelectedTask();
-      isRightContainerOpen = false;
     } else if (adjust == OPEN) {
-      CENTER.className = "center";
       RIGHT_SIDE.className = "right-side";
       isRightContainerOpen = true;
+      applyCenterRender();
     }
     events();
+  }
+
+  /**
+   * Controls the Left side whether to close it or open it
+   * commonly used when the user invokes the menu icon in the left side or
+   * the menu icon on the center
+   * left side contains categories and other accessibilities
+   * Left side stays still until user decides to hide it using the menu icon
+   * @param {*} event - this function will be called with this event when a user clicks
+   *                    on the menu indicated icons whether, menu icon on the left side
+   *                    or center for diplay for the left side/ category side
+   */
+  function controlLeftSide(event) {
+    if (event.type == "click") {
+      if (event.target.id == "left-side-nav") {
+        LEFT_SIDE.className = "left-side-closed";
+        CENTER_ICON.className = "menu-icon";
+        currentCategoryIcon = CENTER_ICON.childNodes[1].innerText;
+        CENTER_ICON.childNodes[1].innerText = "menu";
+        isLeftContainerOpen = false;
+        applyCenterRender();
+      } else {
+        LEFT_SIDE.className = "left-side";
+        CENTER_ICON.className = "center-head-icon";
+        CENTER_ICON.childNodes[1].innerText = currentCategoryIcon;
+        isLeftContainerOpen = true;
+        applyCenterRender();
+      }
+    }
+  }
+
+  /**
+   * Applies the center render, i.e changing the respective class name
+   * for the center to make sure it fills up perfectly on the
+   * hided portion in the webpage,
+   * eg when a user decides to hide the left side the center
+   * container will fill up space in left side and increases its
+   * size and corresponding width of it.
+   */
+  function applyCenterRender() {
+    if (!isRightContainerOpen && !isLeftContainerOpen) {
+      CENTER.className = "center center-full";
+    } else if (!isRightContainerOpen) {
+      CENTER.className = "center center-right-wide";
+    } else if (!isLeftContainerOpen) {
+      CENTER.className = "center center-left-wide";
+    } else {
+      CENTER.className = "center";
+    }
   }
 
   /**
