@@ -31,8 +31,8 @@ import java.util.List;
 public class Controller {
 
     private final List<Task> tasks = new ArrayList<>();
-    static List<Category> categories = new ArrayList<>();
     private final List<User> users = new ArrayList<>();
+    static List<Category> categories = new ArrayList<>();
     boolean check = false;
     int categoryId = 5;
     int userId = 0;
@@ -43,19 +43,21 @@ public class Controller {
      * category and a task can contain many category id from these default category
      * and a new category can also be created by the request from the user
      */
-    public static void generateDefaultCategory() {
+    public static List<Category> generateDefaultCategory() {
+        List<Category> userCategories = new ArrayList<>();
         Category myDay = new Category(1, "light_mode", "My Day");
         Category important = new Category(2, "star", "Important");
         Category planned = new Category(3, "calendar_month", "Planned");
         Category assignedToMe = new Category(4, "person", "Assigned to me");
         Category tasks = new Category(5, "home", "Tasks");
-        categories.add(myDay);
-        categories.add(important);
-        categories.add(planned);
-        categories.add(assignedToMe);
-        categories.add(tasks);
+        userCategories.add(myDay);
+        userCategories.add(important);
+        userCategories.add(planned);
+        userCategories.add(assignedToMe);
+        userCategories.add(tasks);
+        return userCategories;
     }
-    
+
     /**
      * Saves the category in the list, commonly invoked when user
      * api request needs a new category to be created,
@@ -66,13 +68,16 @@ public class Controller {
      *                 added to the category list
      * @return the id of the category if it was added successfully
      */
-    @PostMapping("/category")
-    public int saveCategory(@RequestBody Category category) {
-        if (category.getId() <= 0) {
-            category.setId(++categoryId);
-            categories.add(category);
+    @PostMapping("/category/{userId}")
+    public int saveCategory( @PathVariable int userId, @RequestBody Category category) {
+        for (User user: users) {
+            if (user.getId() == userId && category.getId() <= 0) {
+                category.setId(++categoryId);
+                user.getCategories().add(category);
+                return category.getId();
+            }
         }
-        return category.getId();
+        return 0;
     }
 
     /**
@@ -80,16 +85,19 @@ public class Controller {
      * commonly invoked when api request to get all categories
      * before getting categories, It checks if the categories list is empty,
      * if it is, it generates a default category and sets the check variable to true
-     * 
+     *
      * @return A list of categories
      */
-    @GetMapping("/categories")
-    public List<Category> getCategories() {
-        if (!check) {
-            generateDefaultCategory();
-            check = true;
+    @GetMapping("/categories/{userId}")
+    public List<Category> getCategories(@PathVariable int userId) {
+        System.out.println("inside getCat");
+        for (User user: users) {
+            System.out.println(user);
+            if (user.getId() == userId) {
+                return user.getCategories();
+            }
         }
-        return categories;
+        return null;
     }
 
     /**
@@ -131,69 +139,36 @@ public class Controller {
             oldUser.setPhoneNumber(user.getPhoneNumber());
             oldUser.setEmailId(user.getEmailId());
         } else {
+            List<Category> userCategory;
+            userCategory = generateDefaultCategory();
             user.setId(++userId);
+            user.setCategories(userCategory);
             users.add(user);
+            System.out.println(user);
         }
         return user;
-    }
-
-    /**
-     * Gets all the task from the task list, task contains the entries from the user
-     * for to-do list
-     * A task contains many attribute such as completed status, list of category ids
-     * and
-     * created at to make use of the date origin the task was created
-     * task contain list of category ids to render the required the task to
-     * their corresponding selected category.
-     * task contains note and status of the note saved which can be used to make the
-     * user
-     * know when the note was saved and updated
-     *
-     * @return list of available task, will return null if there is no task in the
-     *         task list
-     */
-    @GetMapping("/tasks")
-    public List<Task> getAllTasks() {
-        return tasks;
-    }
-
-    @GetMapping("/user/{userName}/{password}")
-    public User getUserByCredentials(@PathVariable String userName, @PathVariable String password) {
-        for (User user : users) {
-            System.out.println("us" + userName + user.getName()+ "p" + password + user.getPassword());
-            if (userName.equals(user.getName())) {
-                System.out.println("poiu");
-                if (password.equals(user.getPassword())) {
-                    System.out.println(user);
-                    return user;
-                }
-            }
-        }
-        return null;
     }
 
     @PostMapping("/login")
     public User loginUser(@RequestBody User user) {
         for(User presentUser: users) {
-            if(user.getName().equals(presentUser.getName())) {
-                if(user.getPassword().equals(presentUser.getPassword())) {
-                    return presentUser;
-                }
+            if(user.getName().equals(presentUser.getName()) && user.getPassword().equals(presentUser.getPassword())) {
+                return presentUser;
             }
         }
         return null;
     }
 
-    @GetMapping("/task/{categoryId}")
-    public List<Task> getTaskById(@PathVariable int categoryId) {
-        List<Task> tasksByCategoryId = new ArrayList<>();
+    @GetMapping("/task/{categoryId}/{userId}")
+    public List<Task> getTaskById(@PathVariable int categoryId, @PathVariable int userId) {
+        List<Task> tasksById = new ArrayList<>();
         for (Task task : tasks) {
             for (int id : task.getCategoryIds()) {
-                if (id == categoryId) {
-                    tasksByCategoryId.add(task);
+                if (id == categoryId && task.getUserId() == userId) {
+                    tasksById.add(task);
                 }
             }
         }
-        return tasksByCategoryId;
+        return tasksById;
     }
 }

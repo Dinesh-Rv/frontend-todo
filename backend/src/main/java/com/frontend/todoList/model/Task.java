@@ -36,6 +36,8 @@ public class Task {
     @JsonProperty(value = "isImportant")
     private boolean isImportant;
 
+    private int userId;
+
     @Override
     public String toString() {
         return "Task{" +
@@ -47,6 +49,7 @@ public class Task {
                 ", note='" + note + '\'' +
                 ", noteSavedAt=" + noteSavedAt +
                 ", isImportant=" + isImportant +
+                ", user=" + userId +
                 '}';
     }
 }

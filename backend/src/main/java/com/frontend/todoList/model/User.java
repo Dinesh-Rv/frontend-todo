@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,6 +17,7 @@ public class User {
     private String password;
     private String emailId;
     private String phoneNumber;
+    private List<Category> categories;
 
     @Override
     public String toString() {
@@ -24,7 +27,8 @@ public class User {
            ", password= " + password +
            ", emailId= " + emailId +
            ", phoneNumber= " + phoneNumber +
-           "}"; 
+            ",category=" + categories +
+           "}";
 }
 
 }
